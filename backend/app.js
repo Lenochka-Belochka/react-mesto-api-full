@@ -14,7 +14,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLoger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 4000 } = process.env;
 const app = express();
 
 app.use(requestLogger);
@@ -58,7 +58,7 @@ app.post(
   createUser,
 );
 
-app.use('/', auth, usersRouter);
+app.use('/', usersRouter);
 app.use('/', auth, cardsRouter);
 app.all('*', auth, errorRouter);
 app.use(errorLoger);
