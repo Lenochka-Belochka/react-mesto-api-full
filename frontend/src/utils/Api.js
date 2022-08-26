@@ -2,7 +2,7 @@ import {cohort, token} from './Utils';
 
 export class Api {
   constructor(options) {
-    this._baseUrl = options.baseUrl;
+    this._baseUrl = "https://backend.mesto.tinaevnk.nomoredomains.xyz";
     this._headers = options.headers;
   }
 
