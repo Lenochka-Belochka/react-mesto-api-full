@@ -58,7 +58,7 @@ app.post(
   createUser,
 );
 
-app.use('/', usersRouter);
+app.use('/', auth, usersRouter);
 app.use('/', auth, cardsRouter);
 app.all('*', auth, errorRouter);
 app.use(errorLoger);
