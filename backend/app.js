@@ -65,12 +65,6 @@ app.use(errorLoger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({ message: statusCode === 500 ? 'Ошибка на сервере' : message });
-  next();
-});
-
 app.use(errorHandler);
 
 app.listen(PORT, () => {
