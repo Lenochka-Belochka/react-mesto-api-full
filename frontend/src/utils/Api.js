@@ -1,6 +1,12 @@
-import {cohort, token} from './Utils';
+const hasError = res => {
+  if (res.ok) {
+    return res.json();
+  }
 
-export class Api {
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
+
+class Api {
   constructor({baseUrl, headers}) {
     this._url = baseUrl;
     this._headers = headers;
@@ -14,164 +20,97 @@ export class Api {
     };
   }
 
-  //Ответ от сервера
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка выполнении запроса: ${res.status}`);
+  getInitialCards() { 
+    return fetch(`${this._url}/cards`, {
+      method: 'GET',
+      headers: this._getHeaders()
+    })
+      .then(hasError);
   }
 
-  
-  // Публичный метод для загрузки пользовательского профиля
-
-  getUserProfile() {
+  getUserProfile() { 
     return fetch(`${this._url}/users/me`, {
-      method: "GET",
-      headers: this._getHeaders(),
+      method: 'GET',
+      headers: this._getHeaders()
     })
-      .then((res) => this._checkResponse(res))
+      .then(hasError);
   }
 
-  //Публичный метод для загрузки карточек
-
-  getInitialCards() {
-    return fetch(`${this._url}/cards`, {
-      method: "GET",
-      headers: this._getHeaders(),
-    })
-      .then((res) => this._checkResponse(res))
+  renderUserAndCards() { // если оба промиса зарезолвены - верни массив этих промисов
+    return Promise.all([this.getUserInfo(), this.getInitialCards()])
   }
-
-  // Метод для удаления карточки
-  deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId._id}`, {
-      method: "DELETE",
-      headers: this._getHeaders(),
-    })
-      .then((res) => this._checkResponse(res))
-  }
-
-
-  // Метод для добавления карточки
-  addCard(cardData) { 
-    return fetch(`${this._url}/cards`, {
-      method: "POST",
-      headers: this._getHeaders(),
-      body: JSON.stringify({
-        name: cardData.name,
-        link: cardData.link,
-      }),
-    })
-      .then((res) => this._checkResponse(res))
-  }
-
-  //Метод для сохранения данных профиля 
 
   saveNewProfile(profileData) {
     return fetch(`${this._url}/users/me`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: this._getHeaders(),
       body: JSON.stringify({
         name: profileData.name,
-        about: profileData.about,
-      }),
+        about: profileData.about
+      })
     })
-      .then((res) => this._checkResponse(res))
+    .then(hasError)
   }
 
-  // Метод для обновления автара 
-  updateAvatar(newAvatar) {
+  addCard(cardData) { 
+    return fetch(`${this._url}/cards`, {
+      method: 'POST',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        name: cardData.name,
+        link: cardData.link
+      })
+    })
+      .then(hasError);
+  }
+
+  updateAvatar(newAvatar) { 
     return fetch(`${this._url}/users/me/avatar`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: this._getHeaders(),
       body: JSON.stringify({
         avatar: newAvatar.link,
-      }),
+      })
     })
-      .then((res) => this._checkResponse(res))
+    .then(hasError)
   }
 
-  // Метод для лайка карточки
-  likeCard(cardId) {
+  likeCard(cardId) { 
     return fetch(`${this._url}/cards/${cardId._id}/likes`, {
-      method: "PUT",
-      headers: this._getHeaders(),
+      method: 'PUT',
+      headers: this._getHeaders()
     })
-      .then((res) => this._checkResponse(res))
+      .then(hasError);
   }
 
-  // Метод для удаления лайка 
-  deleteLike(cardId) {
+  deleteLike(cardId) { 
     return fetch(`${this._url}/cards/${cardId._id}/likes`, {
-      method: "DELETE",
-      headers: this._getHeaders(),
+      method: 'DELETE',
+      headers: this._getHeaders()
     })
-      .then((res) => this._checkResponse(res))
+      .then(hasError);
   }
   changeLikeCardStatus(cardId, isLiked) {
-    const method = isLiked ? "DELETE" : "PUT";
-    const request = this._baseUrl + `/cards/${cardId}/likes`;
-    return fetch(request, {
-      method: method,
+    return fetch(`${this._url}/cards/${cardId._id}/likes`, {
+      method: isLiked ? "DELETE" : "PUT",
       headers: this._headers,
     }).then((res) => this._checkResponse(res));
   }
-  // создание пользователя
 
- register(password, email) {
-  return (
-    fetch(`${this._url}/signup`, {
-      method: "POST",
-      headers: this._headers,
-      body: JSON.stringify({ password, email }),
+  deleteCard(cardId) { 
+    return fetch(`${this._url}/cards/${cardId._id}`, {
+      method: 'DELETE',
+      headers: this._getHeaders()
     })
-      .then((res) => this._checkResponse(res))
-  );
+      .then(hasError);
+  }
 }
 
-// авторизация 
-
-login(password, email) {
-    fetch(`${BASE_URL}/signin`, {
-      method: "POST",
-      headers: this._headers,
-      body: JSON.stringify({ password, email }),
-    })
-      .then((res) => this._checkResponse(res));
-}
-
-// проверка токена
-
-getContent(token) {
-  const request = this._baseUrl + "/users/me";
-  const newHeaders = this._headers;
-  newHeaders["Authorization"] = `Bearer ${token}`;
-
-  return (
-    fetch(request, {
-      method: "GET",
-      headers: _getHeaders(),
-    })
-      .then((res) => this._checkResponse(res))
-      .then((data) => {
-        return data;
-      })
-  );
-}
-}
-
-export const Auth = new Api({
-baseUrl: "https://mesto.back.project.nomoredomains.sbs",
-headers: { "Content-Type": "application/json" },
+const api = new Api({ 
+  baseUrl: 'https://mesto.back.project.nomoredomains.sbs',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
-
-// Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
-export const api = new Api({
-  baseUrl: `https://mesto.back.project.nomoredomains.sbs`,
-  headers: { 'Content-Type': 'application/json'  }
-});
-
-
-
+export default api;
