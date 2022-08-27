@@ -9,7 +9,7 @@ import avatar from "../../src/images/profile/Avatar.png";
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 import { api, Auth } from "../../src/utils/Api";
 import { Route, Switch } from "react-router-dom";
-import { withRouter, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Header from "./Header";
 import Main from "./Main";
@@ -97,7 +97,7 @@ function App() {
   }
 
   //
-  useEffect(() => {
+  React.useEffect(() => {
     checkToken();
   }, [loggedIn]);
 
@@ -130,7 +130,7 @@ function App() {
       });
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (loggedIn) {
       api
         .getInitialCards()
