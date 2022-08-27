@@ -9,7 +9,7 @@ import avatar from "../../src/images/profile/Avatar.png";
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 import { api, Auth } from "../../src/utils/Api";
 import { Route, Switch } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 
 import Header from "./Header";
 import Main from "./Main";
@@ -67,8 +67,7 @@ function App() {
     setUserEmail("");
     history.push("/sign-in");
   }
-  
-  React.useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
       api
         .getUserProfile()
@@ -81,7 +80,6 @@ function App() {
         });
     }
   }, [loggedIn]);
-
 
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
@@ -98,15 +96,11 @@ function App() {
     }
   }
 
-  React.useEffect(
-		() => {
-			const token = localStorage.getItem('jwt');
-			if (token) {
-				checkToken()
-			}
-		}, [checkToken]
-	)
- 
+  //
+  useEffect(() => {
+    checkToken();
+  }, [loggedIn]);
+
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -136,7 +130,7 @@ function App() {
       });
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
       api
         .getInitialCards()
