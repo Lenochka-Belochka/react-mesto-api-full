@@ -106,11 +106,9 @@ class Api {
   }
 }
 
-const api = new Api({ 
+export const api = new Api({ 
   baseUrl: 'https://mesto.back.project.nomoredomains.sbs',
   headers: {
     'Content-Type': 'application/json'
   }
 });
-
-export default api;
