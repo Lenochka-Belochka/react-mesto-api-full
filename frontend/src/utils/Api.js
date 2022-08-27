@@ -175,14 +175,12 @@ getContent(token) {
 }
 
 
-// Здесь создаем экземпляр класса Api и экспортируем этот экземпляр вместо самого класса
 export const Auth = new Api({
 baseUrl: "https://mesto.back.project.nomoredomains.sbs/",
 headers: { "Content-Type": "application/json" },
 });
 
 
-// Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
 export const api = new Api({
   baseUrl: `https://mesto.back.project.nomoredomains.sbs/`,
   headers: { "Content-Type": "application/json"}
