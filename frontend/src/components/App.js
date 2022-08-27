@@ -7,8 +7,7 @@ import unsuccessPic from "../../src/images/header/unsuccess_pic.svg";
 import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
-import { api} from "../../src/utils/Api";
-import * as Auth from "../../src/utils/Auth";
+import { api, Auth } from "../../src/utils/Api";
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
