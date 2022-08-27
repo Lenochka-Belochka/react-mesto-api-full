@@ -1,4 +1,3 @@
-
 export class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
@@ -185,8 +184,5 @@ headers: { "Content-Type": "application/json" },
 // Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
 export const api = new Api({
   baseUrl: `https://mesto.back.project.nomoredomains.sbs`,
-  headers: { "Content-Type": "application/json" }
+  headers: { authorization: token }
 });
-
-
-

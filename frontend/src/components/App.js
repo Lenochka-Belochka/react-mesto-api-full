@@ -67,7 +67,8 @@ function App() {
     setUserEmail("");
     history.push("/sign-in");
   }
-  useEffect(() => {
+  
+  React.useEffect(() => {
     if (loggedIn) {
       api
         .getUserProfile()
@@ -80,6 +81,7 @@ function App() {
         });
     }
   }, [loggedIn]);
+
 
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
@@ -96,11 +98,15 @@ function App() {
     }
   }
 
-  //
-  React.useEffect(() => {
-    checkToken();
-  }, [loggedIn]);
-
+  React.useEffect(
+		() => {
+			const token = localStorage.getItem('jwt');
+			if (token) {
+				checkToken()
+			}
+		}, [checkToken]
+	)
+ 
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
