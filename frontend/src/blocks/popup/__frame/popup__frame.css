@@ -1,0 +1,16 @@
+.popup__frame {
+  width: 430px;
+  max-width: 430px;
+  max-height: 330px;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  outline: none;
+}
+
+@media screen and (max-width: 799px) {
+  .popup__frame {
+    max-width: 282px;
+    max-height: 322px;
+  }
+}
