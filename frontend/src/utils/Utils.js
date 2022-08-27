@@ -25,6 +25,8 @@ export const initialCards = [
   },
 ];
 
+export const cohort = 'cohort-41';
+export const token = '0e0878b0-27c7-481c-9d47-0d05d423b137';
 
 export const commonObject = {
   formSelector: ".form",
