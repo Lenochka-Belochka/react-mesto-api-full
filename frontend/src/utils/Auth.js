@@ -1,4 +1,4 @@
-const BASE_URL = "https://backend.mesto.tinaevnk.nomoredomains.xyz";
+const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
 
 const hasError = res => {
   if (res.ok) {
