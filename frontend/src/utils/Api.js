@@ -36,7 +36,7 @@ class Api {
       .then(hasError);
   }
 
-  renderUserAndCards() { // если оба промиса зарезолвены - верни массив этих промисов
+  renderUserAndCards() { 
     return Promise.all([this.getUserInfo(), this.getInitialCards()])
   }
 
