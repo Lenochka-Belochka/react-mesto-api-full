@@ -23,7 +23,7 @@ class Register extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    props.onRegister(this.state.password, this.state.email);
+    this.props.onRegister(this.state.password, this.state.email);
   }
 
   render() {
@@ -38,7 +38,7 @@ class Register extends React.Component {
           onSubmit={this.handleSubmit}
           onChange={this.handleChange}
         >
-          <Link to="/sign-in" className="form__login-link">
+          <Link to="/signin" className="form__login-link">
             Уже зарегистрированы? Войти
           </Link>
         </Sign>
