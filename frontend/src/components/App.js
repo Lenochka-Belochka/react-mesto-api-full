@@ -76,7 +76,7 @@ function App() {
     })
     .catch(err => console.log(err))
   if (token) {
-    auth.getContent(token)
+    Auth.getContent(token)
       .then((res) => {
         if (res) {
           setLoggedIn(true);
@@ -115,12 +115,12 @@ function App() {
         });
     }
   }
-*/
+
   //
   useEffect(() => {
     checkToken();
   }, [loggedIn]);
-
+*/
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
