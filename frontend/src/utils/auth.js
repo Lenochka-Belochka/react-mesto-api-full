@@ -1,40 +1,41 @@
 export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
 
+const HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+}
+
 const getJson = (response) => {
     if (response.ok) {
         return response.json();
     }
-    return console.log('Ошибка на сервере: ' + response.status + ' - ' + response.statusText);
+    throw new Error({ status: response.status });
 }
 
-export const register = (password, email) => {
+export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ password, email })
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
     })
         .then(getJson)
-}
+};
 
-export const authorize = (password, email) => {
+export const authorization = (email, password) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ password, email })
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
     })
         .then(getJson)
-}
+};
 
-export const checkToken = (token) => {
+export const examinationValidationToken = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            ...HEADERS,
+            'Authorization': `Bearer ${token}`
         }
     })
         .then(getJson)
