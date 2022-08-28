@@ -1,21 +1,10 @@
 .form {
-  background: #fff;
-  color: #000;
-  outline: none;
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  width: 100%;
-  max-height: 330px;
-  padding: 36px;
-  margin: 0;
+    box-sizing: border-box;
+    padding: 34px 36px 37px;
 }
 
-@media screen and (max-height: 400px) {
-  .form {
-    padding: 25px;
-  }
+@media screen and (max-width: 615px) {
+    .form {
+        padding: 25px 22px;
+    }
 }

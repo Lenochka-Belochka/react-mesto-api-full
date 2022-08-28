@@ -1,34 +1,29 @@
 import React from "react";
-import { Route, Link, Switch } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import mestoLogo from '../images/mestologo.svg';
 
 function Header(props) {
-  return (
-    <header className="header">
-      <img className="header__logo" src={props.logo} alt="Лого Mesto Russia" />
-      <div className="header__authorization">
-        <p className="header__email">{props.email}</p>
-        <Switch>
-          <Route exact path="/">
-            <p className="header__link" onClick={props.onSignOut}>
-              Выйти
-            </p>
-          </Route>
+    const put = <Link className="header__link" to='/signin'>Войти</Link>;
+    const exit = <Link className="header__link" to='/' onClick={props.logout}>Выйти</Link>;
+    const register = <Link className="header__link" to='/signup'>Регистрация</Link>;
+    const location = useLocation();
 
-          <Route path="/sign-up">
-            <Link to="/sign-in" className="header__link">
-              Войти
-            </Link>
-          </Route>
-
-          <Route path="/sign-in">
-            <Link to="/sign-up" className="header__link">
-              Регистрация
-            </Link>
-          </Route>
-        </Switch>
-      </div>
-    </header>
-  );
+    return (
+        <header className="header">
+        {/* <div className="header__conteiner-phone">
+                <p className="header__email">{props.email}</p>
+                {props.loggedIn && exit}
+            </div> */}
+        <div className="header__row">
+          <img className="header__logo" src={mestoLogo} alt="Место" />
+          <div className="header__row">
+            <p className="header__email header__email-right">{props.email}</p>
+            {location.pathname === '/signup' && put}
+            {location.pathname === '/signin' && register}
+            {props.loggedIn && exit}
+          </div>
+            </div>
+        </header >
+    );
 }
-
 export default Header;

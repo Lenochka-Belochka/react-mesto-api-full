@@ -1,21 +1,16 @@
 .profile {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 40px 200px 50px 200px;
-  background-color: #000000;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
+    box-sizing: border-box;
+    max-width: 100%;
+    margin-bottom: 51px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-@media screen and (max-width: 1023px) {
-  .profile {
-    padding: 38.25px 19px 36px 19px;
-  }
-}
-
-@media screen and (max-width: 799px) {
-  .profile {
-    flex-direction: column;
-  }
+@media screen and (max-width: 899px) {
+    .profile {
+        margin-bottom: 0;
+        padding: 0 19px;
+        flex-direction: column;
+    }
 }
