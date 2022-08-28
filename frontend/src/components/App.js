@@ -7,7 +7,8 @@ import unsuccessPic from "../../src/images/header/unsuccess_pic.svg";
 import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
-import { api, Auth } from "../../src/utils/Api";
+import { api } from "../../src/utils/Api";
+import * as auth from "../utils/auth";
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
 
@@ -67,26 +68,27 @@ function App() {
     setUserEmail("");
     history.push("/sign-in");
   }
-  useEffect(() => {
+
+useEffect(() => {
     const token = localStorage.getItem("token");
     Promise.all([api.getUserProfile(), api.getInitialCards()])
-    .then(([userData, card]) => {
-      setCurrentUser(userData);
-      setCards(card);
-    })
-    .catch(err => console.log(err))
-  if (token) {
-    Auth.getContent(token)
-      .then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          history.push('/');
-        }
+      .then(([user, card]) => {
+        setCurrentUser(user);
+        setCards(card);
       })
       .catch(err => console.log(err))
-  }
-}, []);
+    if (token) {
+      auth.examinationValidationToken(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setUserEmail(res.email);
+            history.push('/');
+          }
+        })
+        .catch(err => console.log(err))
+    }
+  }, []);
 
    /* if (loggedIn) {
       api
@@ -239,7 +241,7 @@ function App() {
   }
 
   function handleLoginSubmit(password, email) {
-    Auth.login(password, email)
+    auth.login(password, email)
     .then((res) => {
       setLoggedIn(true);
       localStorage.setItem("jwt", res.token);
@@ -255,7 +257,7 @@ function App() {
 
   // обработчик registration
   function handleRegisterSubmit(password, email) {
-    Auth.register(password, email)
+    auth.register(password, email)
       .then((res) => {
         console.log(res);
         if (res) {
@@ -268,6 +270,8 @@ function App() {
         handleSuccessRegLog(false);
       });
   }
+
+  
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
