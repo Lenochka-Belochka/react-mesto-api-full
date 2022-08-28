@@ -1,20 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 
-const cors = require('cors');
-const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const routerErrorWay = require('./routes/errorsway');
-const { createUser, login } = require('./controllers/users');
+const cors = require('cors');
+const { errors, celebrate, Joi } = require('celebrate');
+const usersRouter = require('./routes/users');
+const cardsRouter = require('./routes/cards');
+const errorRouter = require('./routes/error');
 const auth = require('./middlewares/auth');
+const { createUser, login } = require('./controllers/users');
 const errorHandler = require('./middlewares/errorHandler');
-const { registerValid, loginValid } = require('./middlewares/validationJoi');
 const { requestLogger, errorLoger } = require('./middlewares/logger');
 
-// Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
 app.use(requestLogger);
@@ -29,22 +28,48 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', registerValid, createUser);
-app.post('/signin', loginValid, login);
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+});
 
-// подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/mestodb', { useNewUrlParser: true });
+app.use(express.json());
 
-app.use('/cards', require('./routes/cards'));
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required(),
+    }),
+  }),
+  login,
+);
 
-app.use(auth);
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required(),
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      avatar: Joi.string().regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
+    }),
+  }),
+  createUser,
+);
 
-app.use(routerErrorWay);
-
+app.use('/', auth, usersRouter);
+app.use('/', auth, cardsRouter);
+app.all('*', auth, errorRouter);
 app.use(errorLoger);
-
 app.use(errors());
-
 app.use(errorHandler);
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({ message: statusCode === 500 ? 'Ошибка на сервере' : message });
+  next();
+});
 
 app.listen(PORT);
