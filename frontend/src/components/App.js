@@ -66,7 +66,7 @@ function App() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
     setUserEmail("");
-    history.push("/sign-in");
+    history.push("/signin");
   }
 
 useEffect(() => {
@@ -291,7 +291,7 @@ useEffect(() => {
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
           />
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register
               name="registration"
               title="Регистрация"
@@ -300,7 +300,7 @@ useEffect(() => {
             />
           </Route>
 
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login
               name="login"
               title="Вход"
