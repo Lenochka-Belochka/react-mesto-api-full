@@ -97,11 +97,10 @@ class Api {
     }
   }
   
-  const api = new Api({
+  export const api = new Api({
     address: 'https://mesto.back.project.nomoredomains.sbs',
   });
   
-  export default api;
 
 
 
