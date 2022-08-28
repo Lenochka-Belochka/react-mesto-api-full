@@ -1,35 +1,54 @@
 import React from "react";
-import Sign from "./Sign";
 
 function Login(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+    const [formData, setFormData] = React.useState({});
 
-  function handleChange(event) {
-    const target = event.target;
-    target.name === "email"
-      ? setEmail(target.value)
-      : setPassword(target.value);
-  }
+    function handleInputChange(e) {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setEmail("");
-    setPassword("");
-    props.onLogin(password, email);
-  }
+    function clearFormData() {
+        setFormData({ email: '', password: '' });
+    }
 
-  return (
-    <Sign
-      name={props.name}
-      title={props.title}
-      email={email}
-      password={password}
-      buttonSubmitText={props.buttonSubmitText}
-      onSubmit={handleSubmit}
-      onChange={handleChange}
-    />
-  );
+    function handleSubmit(e) {
+        e.preventDefault();
+        props.onLogin(formData.password, formData.email, clearFormData)
+    }
+
+    return (
+        <section className="login">
+            <div className="login__container">
+                <h1 className="login__title">Вход</h1>
+                <form className="login__form" onSubmit={handleSubmit}>
+                    <input
+                        className="login__input"
+                        type="email"
+                        placeholder="Email"
+                        required
+                        name="email"
+                        onChange={handleInputChange}
+                        value={formData.email || ''} />
+                    <input
+                        className="login__input"
+                        type="password"
+                        placeholder="Пароль"
+                        required
+                        name="password"
+                        onChange={handleInputChange}
+                        value={formData.password || ''} />
+                    <button
+                        className="login__button"
+                        type="submit"
+                        aria-label="Войти." >Войти</button>
+                </form>
+            </div>
+        </section>
+    )
 }
 
 export default Login;

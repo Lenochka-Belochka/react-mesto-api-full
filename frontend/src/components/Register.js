@@ -1,50 +1,54 @@
 import React from "react";
-import Sign from "./Sign";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: "",
-      email: "",
-    };
+function Register(props) {
+    const [formData, setFormData] = React.useState({});
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+    function handleInputChange(e) {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    }
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+    function handleSubmit(e) {
+        e.preventDefault();
+        props.onRegister(formData.password, formData.email);
+    }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.onRegister(this.state.password, this.state.email);
-  }
-
-  render() {
     return (
-      <>
-        <Sign
-          name={this.props.name}
-          title={this.props.title}
-          email={this.state.email}
-          password={this.state.password}
-          buttonSubmitText={this.props.buttonSubmitText}
-          onSubmit={this.handleSubmit}
-          onChange={this.handleChange}
-        >
-          <Link to="/sign-in" className="form__login-link">
-            Уже зарегистрированы? Войти
-          </Link>
-        </Sign>
-      </>
-    );
-  }
+        <section className="register">
+            <div className="register__container">
+                <h1 className="register__title">Регистрация</h1>
+                <form className="register__form" onSubmit={handleSubmit}>
+                    <input
+                        className="register__input"
+                        type="email"
+                        placeholder="Email"
+                        required
+                        name="email"
+                        onChange={handleInputChange}
+                        value={formData.email || ''} />
+                    <input
+                        className="register__input"
+                        type="password"
+                        placeholder="Пароль"
+                        required
+                        minLength='8'
+                        maxLength='16'
+                        name="password"
+                        onChange={handleInputChange}
+                        value={formData.password || ''} />
+                    <button
+                        className="register__button"
+                        type="submit"
+                        aria-label="Зарегистрироваться." >Зарегистрироваться</button>
+                    <p className="register__caption">Уже зарегистрированы? <Link to="/signin" className="register__link">Войти</Link></p>
+                </form>
+            </div>
+        </section>
+    )
 }
 
-export default withRouter(Register);
+export default Register;

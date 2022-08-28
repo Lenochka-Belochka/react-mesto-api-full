@@ -1,11 +1,18 @@
 .header__email {
-    line-height: 22px;
-    color: #FFFFFF;
-    text-align: right;
+    color: #fff;
     margin: 0;
-    padding: 51px 24px 46px 0;
-    font-family: "Inter", Arial, sans-serif;
+    padding: 0 24px 0 0;
+    font-family: Inter;
     font-style: normal;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 18px;
-  }
+    line-height: 22px;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .header__email {
+        display: none;
+        /* пока что скрыл */
+    }
+}

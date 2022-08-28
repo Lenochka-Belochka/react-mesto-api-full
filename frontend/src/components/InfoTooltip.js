@@ -1,40 +1,19 @@
 import React from "react";
-import PopupWithoutForm from "./PopupWithoutForm";
+import popupSuccessImage from '../images/PopupSuccess.svg';
+import popupErrorImage from '../images/PopupError.svg';
 
 function InfoTooltip(props) {
-  return (
-    <PopupWithoutForm isOpen={props.isOpen} onClose={props.onClose}>
-      {props.successReg ? (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.success_pic}
-            alt="Pic success"
-          />
 
-          <p className="popup__explanation">
-            Вы успешно
-            <br />
-            зарегистрировались!
-          </p>
+    return (
+        <div className={`popup ${props.isOpen ? 'popup_opened' : ''}`}>
+            <div className="popup__container">
+                <button type="button" className="popup__close-button" aria-label="Закрыть попап" onClick={props.onClose}></button>
+                {props.popupStatus ? <img className="popup__icon" src={popupSuccessImage} /> : <img className="popup__icon" src={popupErrorImage} />}
+                {props.popupStatus ? <h1 className="popup__description">Вы успешно зарегистрировались!</h1> : <h1 className="popup__description">Что-то пошло не так!
+                    Попробуйте ещё раз.</h1>}
+            </div>
         </div>
-      ) : (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.unsuccess_pic}
-            alt="Pic unsuccess"
-          />
-
-          <p className="popup__explanation">
-            Что-то пошло не так!
-            <br />
-            Попробуйте еще раз.
-          </p>
-        </div>
-      )}
-    </PopupWithoutForm>
-  );
+    )
 }
 
 export default InfoTooltip;
