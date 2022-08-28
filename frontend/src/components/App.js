@@ -240,8 +240,8 @@ useEffect(() => {
       });
   }
 
-  function handleLoginSubmit(formData) {
-    auth.authorization(formData.email, formData.password)
+  function handleLoginSubmit(email, password) {
+    auth.authorization(email, password)
     .then((res) => {
       setLoggedIn(true);
       localStorage.setItem("jwt", res.token);
@@ -256,8 +256,8 @@ useEffect(() => {
   }
 
   // обработчик registration
-    function handleRegisterSubmit(formData) {
-        auth.register(formData.email, formData.password)
+    function handleRegisterSubmit(email, password) {
+        auth.register(email, password)
       .then((res) => {
         console.log(res);
         if (res) {
