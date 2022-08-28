@@ -42,7 +42,7 @@ class Auth {
 }
 
 export const auth = new Auth({
-	baseUrl: 'https://mesto.first.project.nomoredomains.sbs/',
+	baseUrl: 'https://mesto.back.project.nomoredomains.sbs/',
 	headers: {
 		"Content-Type": "application/json"
 	}
