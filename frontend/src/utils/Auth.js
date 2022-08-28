@@ -13,7 +13,7 @@ const getJson = (response) => {
 }
 
 export const register = (email, password) => {
-    return fetch(`${BASE_URL}/sign-up`, {
+    return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({ email, password })
@@ -22,7 +22,7 @@ export const register = (email, password) => {
 };
 
 export const authorization = (email, password) => {
-    return fetch(`${BASE_URL}/sign-in`, {
+    return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({ email, password })

@@ -34,7 +34,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 
 app.post(
-  '/sign-in',
+  '/signin',
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
@@ -45,7 +45,7 @@ app.post(
 );
 
 app.post(
-  '/sign-up',
+  '/signup',
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
