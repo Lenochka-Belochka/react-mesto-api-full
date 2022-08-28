@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
   if (!authorization || !authorization.startsWith('Bearer ')) {
     throw new AuthError('Необходима авторизация');
   }
-  const token = authorization.replace('Bearer ', '');
+  const token = String(req.headers.authorization).replace('Bearer ', '');
   let payload;
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
