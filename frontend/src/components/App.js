@@ -8,7 +8,7 @@ import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 import { api } from "../../src/utils/Api";
-import * as auth from "../utils/auth";
+import * as auth from "../utils/Auth";
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
 
@@ -240,8 +240,8 @@ useEffect(() => {
       });
   }
 
-  function handleLoginSubmit(password, email) {
-    auth.login(password, email)
+  function handleLoginSubmit(formData) {
+    auth.authorization(formData.email, formData.password)
     .then((res) => {
       setLoggedIn(true);
       localStorage.setItem("jwt", res.token);
@@ -256,12 +256,12 @@ useEffect(() => {
   }
 
   // обработчик registration
-  function handleRegisterSubmit(password, email) {
-    auth.register(password, email)
+    function handleRegisterSubmit(formData) {
+        auth.register(formData.email, formData.password)
       .then((res) => {
         console.log(res);
         if (res) {
-          history.push("/sign-in");
+          history.push("/signin");
           handleSuccessRegLog(true);
         }
       })
@@ -270,7 +270,6 @@ useEffect(() => {
         handleSuccessRegLog(false);
       });
   }
-
   
 
   return (
