@@ -109,7 +109,7 @@ const getToken = () => {
 }
 
 const apiClass = new Api({
-    address: 'mesto.back.project.nomoredomains.sbs'
+    address: 'https://mesto.back.project.nomoredomains.sbs'
 });
 
 export default apiClass;
