@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://mesto-dankuzmenko.herokuapp.com';
+export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
 
 const getJson = (response) => {
     if (response.ok) {
