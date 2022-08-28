@@ -1,52 +1,42 @@
-class Auth {
-	constructor(options) {
-		this._baseUrl = options.baseUrl;
-		this._headers = options.headers
-	}
-	_checkServerStatus(res) {
-		if (res.ok) {
-			return res.json()
-		} else {
-			return Promise.reject(`Ошибка: ${res.status}`);
-		}
-	}
-	registration(password, email) {
-		return fetch(`${this._baseUrl}/signup`, {
-			method: "POST",
-			headers: this._headers,
-			body: JSON.stringify({
-				password: password,
-				email: email
-			})
-		}).then(this._checkServerStatus)
-	}
-	authorization(password, email) {
-		return fetch(`${this._baseUrl}/signin`, {
-			method: "POST",
-			headers: this._headers,
-			body: JSON.stringify({
-				password,
-				email
-			})
-		}).then(this._checkServerStatus)
-	}
+export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
 
-	checkTokenValidity(token) {
-		return fetch(`${this._baseUrl}/users/me`, {
-			method: "GET",
-			headers: {
-				...this._headers, Authorization: `Bearer ${token}`
-			}
-		}).then(this._checkServerStatus)
-	}
+const HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 }
 
-export const auth = new Auth({
-	baseUrl: 'https://mesto.back.project.nomoredomains.sbs',
-	headers: {
-		"Content-Type": "application/json"
-	}
-})
+const getJson = (response) => {
+    if (response.ok) {
+        return response.json();
+    }
+    throw new Error({ status: response.status });
+}
 
+export const register = (email, password) => {
+    return fetch(`${BASE_URL}/signup`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
+    })
+        .then(getJson)
+};
 
+export const authorization = (email, password) => {
+    return fetch(`${BASE_URL}/signin`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
+    })
+        .then(getJson)
+};
 
+export const examinationValidationToken = (token) => {
+    return fetch(`${BASE_URL}/users/me`, {
+        method: 'GET',
+        headers: {
+            ...HEADERS,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(getJson)
+}
