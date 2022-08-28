@@ -1,15 +1,15 @@
 .popup__container {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 430px;
-    background-color: #fff;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    position: relative;
+  max-width: 75vw;
+  max-height: 75vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@media screen and (max-width: 615px) {
-    .popup__container {
-        max-height: 322px;
-    }
+@media screen and (max-width: 520px) {
+  .popup__container {
+    width: 282px;
+    margin: 0 auto;
+  }
 }
