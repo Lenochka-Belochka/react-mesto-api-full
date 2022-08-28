@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs/';
+export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
 
 const HEADERS = {
     'Accept': 'application/json',

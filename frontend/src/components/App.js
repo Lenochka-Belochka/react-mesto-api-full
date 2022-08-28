@@ -89,8 +89,9 @@ useEffect(() => {
         .catch(err => console.log(err))
     }
   }, []);
-
-   /* if (loggedIn) {
+  
+/*
+   if (loggedIn) {
       api
         .getUserProfile()
         .then((userData) => {
