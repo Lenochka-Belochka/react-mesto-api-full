@@ -4,7 +4,7 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
-import api from "../utils/api";
+import api from "../utils/Api";
 import { CurrentUserContext } from '../context/CurrentUserContext';
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -12,7 +12,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import Register from "./Register";
 import Login from "./Login";
-import * as auth from "../utils/auth";
+import * as auth from "../utils/Auth";
 import InfoTooltip from './InfoTooltip';
 
 import unionTrue from '../images/union.svg';
