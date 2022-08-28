@@ -68,7 +68,27 @@ function App() {
     history.push("/sign-in");
   }
   useEffect(() => {
-    if (loggedIn) {
+    const token = localStorage.getItem("token");
+    Promise.all([api.getUserProfile(), api.getInitialCards()])
+    .then(([userData, card]) => {
+      setCurrentUser(userData);
+      setCards(card);
+    })
+    .catch(err => console.log(err))
+  if (token) {
+    auth.getContent(token)
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setUserEmail(res.email);
+          history.push('/');
+        }
+      })
+      .catch(err => console.log(err))
+  }
+}, []);
+
+   /* if (loggedIn) {
       api
         .getUserProfile()
         .then((userData) => {
@@ -95,7 +115,7 @@ function App() {
         });
     }
   }
-
+*/
   //
   useEffect(() => {
     checkToken();
