@@ -3,7 +3,7 @@ class Api {
       this.address = address
       }
   
-      _checkServerStatus(res) {
+      _checkResponse(res) {
         return res.ok ? res.json() : Promise.reject(new Error(`Ошибка: ${res.status}`));
       }
   
@@ -13,19 +13,19 @@ class Api {
               authorization: this.getToken(),
             },
           })
-              .then(this._checkServerStatus);
+              .then(this._checkResponse);
       }
   
-      getUserInfo() {
+      getUserProfile() {
           return fetch(`${this.address}/users/me`, {
             headers: {
               authorization: this.getToken(),
             },
           })
-              .then(this._checkServerStatus)
+              .then(this._checkResponse)
       }
   
-      setUserInfo(data) {
+      saveNewProfile(data) {
           return fetch(`${this.address}/users/me`, {
               method: 'PATCH',
             headers: {
@@ -37,10 +37,10 @@ class Api {
                   about: data.about
               })
           })
-              .then(this._checkServerStatus)
+              .then(this._checkResponse)
       }
   
-      postNewCard({ name, link }) {
+      addCard(data) {
           return fetch(`${this.address}/cards`, {
               method: 'POST',
             headers: {
@@ -48,37 +48,37 @@ class Api {
               authorization: this.getToken(),
             },
               body: JSON.stringify({
-				name,
-				link
+                  name: data.name,
+                  link: data.link
               })
           })
-              .then(this._checkServerStatus)
+              .then(this._checkResponse)
       }
   
-      deleteCard(id) {
-          return fetch(`${this.address}/cards/${id}`, {
+      deleteCard(dataId) {
+          return fetch(`${this.address}/cards/${dataId}`, {
               method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
               authorization: this.getToken(),
             },
           })
-              .then(this._checkServerStatus)
+              .then(this._checkResponse)
       }
   
-      changeLikeCardStatus(id, isLiked) {
+      changeLikeCardStatus(dataId, isLiked) {
           const method = isLiked ? 'DELETE' : 'PUT';
-          return fetch(`${this.address}/cards/${id}/likes`, {
+          return fetch(`${this.address}/cards/${dataId}/likes`, {
               method,
             headers: {
               'Content-Type': 'application/json',
               authorization: this.getToken(),
             },
           })
-              .then(this._checkServerStatus)
+              .then(this._checkResponse)
       }
   
-      updateAvatar(link) {
+      updateAvatar(data) {
           return fetch(`${this.address}/users/me/avatar`, {
               method: 'PATCH',
             headers: {
@@ -86,10 +86,10 @@ class Api {
               authorization: this.getToken(),
             },
               body: JSON.stringify({
-                  avatar: link
+                  avatar: data.avatar
               })
           })
-            .then(this._checkServerStatus)
+            .then(this._checkResponse)
       }
   
     getToken() {
@@ -101,3 +101,6 @@ class Api {
     address: 'https://mesto.back.project.nomoredomains.sbs',
   });
   
+
+
+

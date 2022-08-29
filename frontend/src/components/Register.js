@@ -1,48 +1,50 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Sign from "./Sign";
+import { Link, withRouter } from "react-router-dom";
 
-function Register({ onRegistration }) {
+class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: "",
+      email: "",
+    };
 
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-	function handleEmailChange(event) {
-		setEmail(event.target.value);
-	}
-	function handlePasswordChange(event) {
-		setPassword(event.target.value)
-	}
+  handleChange(event) {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  }
 
-	function handleSubmit(event) {
-		event.preventDefault();
-		onRegistration(password, email);
-	}
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.onRegister(this.state.password, this.state.email);
+  }
 
-	return (
-		<>
-			<Sign
-				title='Регистрация'
-				buttonText='Зарегистрироваться'
-				onSubmit={handleSubmit}
-			>
-				<input required className="form__item form__item_dark" id="email"
-					type="email" name="email" placeholder="E-mail"
-					value={email || ''} onChange={handleEmailChange}
-				/>
-				<span className="form__error" id="email-error"></span>
-				<input required className="form__item form__item_dark" id="password"
-					type="password" name="password" placeholder="Пароль"
-					value={password || ''} onChange={handlePasswordChange}
-				/>
-				<span className="form__error" id="password-error"></span>
-			</Sign>
-			<div className="registration">
-				<p className="registration__text">Уже зарегистрированы?</p>
-				<Link to="/sign-in" className="registration__link">Войти</Link>
-			</div>
-		</>
-	)
+  render() {
+    return (
+      <>
+        <Sign
+          name={this.props.name}
+          title={this.props.title}
+          email={this.state.email}
+          password={this.state.password}
+          buttonSubmitText={this.props.buttonSubmitText}
+          onSubmit={this.handleSubmit}
+          onChange={this.handleChange}
+        >
+          <Link to="/signin" className="form__login-link">
+            Уже зарегистрированы? Войти
+          </Link>
+        </Sign>
+      </>
+    );
+  }
 }
 
-export default Register;
+export default withRouter(Register);

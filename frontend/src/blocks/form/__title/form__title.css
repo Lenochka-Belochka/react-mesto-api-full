@@ -1,15 +1,17 @@
 .form__title {
+  padding-bottom: 38px;
   margin: 0;
-  font-style: normal;
-  font-weight: 900;
   font-size: 24px;
-  line-height: 1.2;
-  color: #000000;
+  font-weight: 900;
+  line-height: 29px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-@media screen and (max-width: 528px) {
+@media screen and (max-width: 480px) {
   .form__title {
     font-size: 18px;
-    text-align: center;
+    line-height: 22px;
   }
 }

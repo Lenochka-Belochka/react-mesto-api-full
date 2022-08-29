@@ -1,16 +1,26 @@
-import closeImagePath from "../images/close-icon.svg"
+import React from "react";
 
-function ImagePopup({ card, onClose }) {
-	return (
-		<section className={card.link ? `popup-card popup popup_opened` : `popup-card popup`} >
-			<div className="popup-card__container">
-				<img src={closeImagePath} alt="Закрытие окна" className="popup__close" onClick={onClose} />
-				<img src={card.link}
-					className="popup-card__image" alt={card.name} />
-				<p className="popup-card__text">{card.name}</p>
-			</div>
-		</section>
-	)
-};
+function ImagePopup(props) {
+  return (
+    <div
+      className={`popup popup_type_card ${props.card._id && "popup_opened"}`}
+    >
+      <div className="popup__container">
+        <button
+          className="popup__button popup__button_type_close"
+          type="reset"
+          aria-label="закрыть"
+          onClick={props.onClose}
+        ></button>
+        <img
+          src={props.card.link}
+          alt={props.card.name}
+          className="popup__image"
+        />
+        <h2 className="popup__title">{props.card.name}</h2>
+      </div>
+    </div>
+  );
+}
 
 export default ImagePopup;
