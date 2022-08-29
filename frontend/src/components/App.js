@@ -102,7 +102,7 @@ function App() {
 			.then(() => {
 				setIsLoginSuccess(true);
 				setInfoTooltipPopupState(true);
-				history.push('/sign-in')
+				history.push('/signin')
 			})
 			.catch((r) => {
 				setIsLoginSuccess(false);
@@ -152,7 +152,7 @@ function App() {
 	function onSignOut() {
 		localStorage.removeItem('jwt');
 		setIsloggedIn(false);
-		history.push("/sign-in");
+		history.push("/signin");
 	}
 
 	function closeAllPopups() {
@@ -189,12 +189,12 @@ function App() {
 					onSignOut={onSignOut}
 				/>
 				<Switch>
-					<Route path="/sign-up">
+					<Route path="/signup">
 						<Register
 							onRegistration={handleRegistation}
 						/>
 					</Route>
-					<Route path="/sign-in">
+					<Route path="/signin">
 						<Login
 							onLogin={handleLogin} />
 					</Route>

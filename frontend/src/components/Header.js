@@ -13,11 +13,11 @@ function Header({ isLoggedIn, userEmail, onSignOut }) {
 						<span className="registration__link" onClick={onSignOut}>Выйти</span>
 					</>
 				}
-				{!isLoggedIn && location.pathname === '/sign-in' &&
-					<Link to="/sign-up" className="registration__link">Регистрация</Link>
+				{!isLoggedIn && location.pathname === '/signin' &&
+					<Link to="/signup" className="registration__link">Регистрация</Link>
 				}
-				{!isLoggedIn && location.pathname === '/sign-up' &&
-					<Link to="/sign-in" className="registration__link">Вoйти</Link>
+				{!isLoggedIn && location.pathname === '/signup' &&
+					<Link to="/signin" className="registration__link">Вoйти</Link>
 				}
 			</div>
 		</header>
