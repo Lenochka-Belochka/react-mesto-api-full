@@ -12,7 +12,7 @@ const getJson = (response) => {
     throw new Error({ status: response.status });
 }
 
-export const register = (email, password) => {
+export const registration = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: HEADERS,
@@ -30,7 +30,7 @@ export const authorization = (email, password) => {
         .then(getJson)
 };
 
-export const examinationValidationToken = (token) => {
+export const checkTokenValidity = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {

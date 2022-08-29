@@ -1,35 +1,42 @@
 import React from "react";
 import Sign from "./Sign";
 
-function Login(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+function Login({ onLogin }) {
 
-  function handleChange(event) {
-    const target = event.target;
-    target.name === "email"
-      ? setEmail(target.value)
-      : setPassword(target.value);
-  }
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setEmail("");
-    setPassword("");
-    props.onLogin(password, email);
-  }
+	function handleEmailChange(event) {
+		setEmail(event.target.value)
+	}
+	function handlePasswordChange(event) {
+		setPassword(event.target.value)
+	}
 
-  return (
-    <Sign
-      name={props.name}
-      title={props.title}
-      email={email}
-      password={password}
-      buttonSubmitText={props.buttonSubmitText}
-      onSubmit={handleSubmit}
-      onChange={handleChange}
-    />
-  );
+	function handleSubmit(event) {
+		event.preventDefault();
+		onLogin(password, email)
+	}
+
+	return (
+		<Sign
+			title='Вход'
+			buttonText='Войти'
+			onSubmit={handleSubmit}
+		>
+			<input required className="form__item form__item_dark" id="email"
+				type="email" name="email" placeholder="E-mail"
+				value={email || ''} onChange={handleEmailChange}
+			/>
+			<span className="form__error" id="email-error"></span>
+			<input required className="form__item form__item_dark" id="password"
+				type="password" name="password" placeholder="Пароль"
+				value={password || ''} onChange={handlePasswordChange}
+			/>
+			<span className="form__error" id="password-error"></span>
+		</Sign>
+
+	)
 }
 
 export default Login;

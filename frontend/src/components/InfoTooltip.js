@@ -1,40 +1,19 @@
-import React from "react";
-import PopupWithoutForm from "./PopupWithoutForm";
+import closeImagePath from "../images/close-icon.svg";
+import regSuccessPath from "../images/reg-success.svg";
+import regFailPath from "../images/reg-fail.svg";
 
-function InfoTooltip(props) {
-  return (
-    <PopupWithoutForm isOpen={props.isOpen} onClose={props.onClose}>
-      {props.successReg ? (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.success_pic}
-            alt="Pic success"
-          />
-
-          <p className="popup__explanation">
-            Вы успешно
-            <br />
-            зарегистрировались!
-          </p>
-        </div>
-      ) : (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.unsuccess_pic}
-            alt="Pic unsuccess"
-          />
-
-          <p className="popup__explanation">
-            Что-то пошло не так!
-            <br />
-            Попробуйте еще раз.
-          </p>
-        </div>
-      )}
-    </PopupWithoutForm>
-  );
+function InfoTooltip({ isOpen, onClose, isLoginSuccess }) {
+	return (
+		<section className={isOpen ? `popup-tooltip popup popup_opened` : `popup`} >
+			<div className="popup__container popup-tooltip__container ">
+				<img src={closeImagePath} alt="Закрытие окна" className="popup__close" onClick={onClose} />
+				<img src={isLoginSuccess ? regSuccessPath : regFailPath} className="popup-tooltip__image"
+					alt={isLoginSuccess ? 'Успешно' : 'Провал'} />
+				<p className="popup-tooltip__text ">{isLoginSuccess ? 'Вы успешно зарегистрировались!'
+					: 'Что-то пошло не так! Попробуйте ещё раз.'}</p>
+			</div>
+		</section>
+	)
 }
-
 export default InfoTooltip;
+
