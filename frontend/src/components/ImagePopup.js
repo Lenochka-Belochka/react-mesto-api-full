@@ -1,17 +1,16 @@
-export default function ImagePopup({ card, onClose, isOpen, useEscapePress }) {
-  function handleClickOverlay(e) {
-    e.stopPropagation();
-  }
+import React from "react";
 
-  useEscapePress(onClose, isOpen);
+function ImagePopup(props) {
+    return (
+        <article className={`popup popup_${props.name} ${props.isOpen && "popup_opened"}`}>
 
-  return(
-    <div id="popup-picture" className={`popup popup_opasity-high ${isOpen && 'popup_opened'}`} onClick={onClose}>
-      <figure className="popup__picture-container" onClick={handleClickOverlay}>
-        <img className="popup__photo" alt={`карточка "${card.name}"`} src={card.link}/>
-        <button type="button" className="popup__close-button popup__close-button_general" onClick={onClose}></button>
-        <figcaption className="popup__photo-name">{card.name}</figcaption>
-      </figure>
-    </div>
-  )
+            <div className="popup__container-open">
+                <img className="popup__open-photo" alt={props.card.name} src={props.card.link} />
+                <p className="popup__open-photo-subtitle">{props.card.name}</p>
+                <button className="popup__close" aria-label="закрыть" type="button" onClick={props.onClose}></button>
+            </div>
+        </article>
+    )
 }
+
+export default ImagePopup;

@@ -1,66 +1,42 @@
-import { useEffect} from 'react';
+import React, { useState } from 'react';
+import Auth from './Auth.js';
 import { Link } from 'react-router-dom';
-import useFormWithValidation from '../hooks/useFormWithValidation.jsx';
 
-export default function Register({handleRegister}) {
-  const {values, handleChange, resetForm, errors, isValid} = useFormWithValidation();
+function Register({ onRegister }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    handleRegister(values);
+  function handleEmail(evt) {
+    setEmail(evt.target.value)
   }
 
-  useEffect(() => {
-    resetForm();
-  }, [resetForm])
+  function handlePassword(evt) {
+    setPassword(evt.target.value)
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onRegister(password, email)
+  }
 
   return (
-    <div className="register page__register">
-      <h2 className="register__title">Регистрация</h2>
-      <form name="form_register" className="register__form" noValidate onSubmit={handleSubmit}>
-        <fieldset className="register__fieldset">
-          <label className="register__label">
-            <input
-              className="register__input"
-              type="email"
-              placeholder="Email"
-              name="email"
-              minLength="2"
-              maxLength="40"
-              value={values.email || ''}
-              onChange={handleChange}
-              required
-            />
-            <span className="register__error" id="email-error">
-              {errors.email || ''}
-            </span>
-          </label>
-          <label className="register__label">
-            <input
-              className="register__input"
-              type="password"
-              placeholder="Пароль"
-              name="password"
-              minLength="2"
-              maxLength="40"
-              value={values.password || ''}
-              onChange={handleChange}
-              required
-            />
-            <span className="register__error" id="password-error">
-              {errors.password || ''}
-            </span>
-          </label>
-        </fieldset>
-        <button
-          type="submit"
-          className={`register__button ${!isValid && 'register__button_disabled'}`}
-          disabled={!isValid}
-        >
-          Зарегистрироваться
-        </button>
-      </form>
-      <Link to="/signin" className="register__link">Уже зарегистрированы? Войти</Link>
+    <div className="register">
+      <Auth title={'Регистрация'} name={'register'} onSubmit={handleSubmit}>
+        <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="new_email"
+          name="email" value={email || ''} onChange={handleEmail}
+          minLength="2" maxLength="40" required />
+        <span className="popup__error email-error"></span>
+
+        <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="new_password"
+          name="password" value={password || ''} onChange={handlePassword}
+          minLength="6" maxLength="200" required />
+        <span className="popup__error password-error"></span>
+
+        <button className={"popup__save popup__save_auth"} type="submit" >Зарегистрироваться</button>
+        <p className={"popup__text"}>Уже зарегистрированы? <Link className={"popup__link"} to={'/signin'}>Войти</Link></p>
+      </Auth>
     </div>
   )
 }
+
+export default Register; 

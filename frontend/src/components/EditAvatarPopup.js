@@ -1,47 +1,31 @@
-import { useEffect } from 'react';
-import PopupWithForm from './PopupWithForm.jsx';
-import useFormWithValidation from '../hooks/useFormWithValidation.jsx';
+import React from "react";
+import PopupWithForm from './PopupWithForm';
 
-export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, useEscapePress }) {
-  const {values, handleChange, resetForm, errors, isValid} = useFormWithValidation();
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+  const avatarRef = React.useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
-    onUpdateAvatar(values);
+
+    onUpdateAvatar({
+      avatar: avatarRef.current.value,
+    });
   }
 
-  // очищаем поля
-  useEffect(() => {
-    resetForm();
-  }, [isOpen, resetForm]);
+  React.useEffect(() => {
+    avatarRef.current.value = '';
+  }, [isOpen])
 
-  return(
-    <PopupWithForm
-      name="avatar"
-      title="Обновить аватар"
+  return (
+    <PopupWithForm name="edit-avatar" title="Обновить Аватар" button="Сохранить"
       isOpen={isOpen}
-      onClose={onClose}
-      useEscapePress={useEscapePress}
       onSubmit={handleSubmit}
-      isDisabled={!isValid}
-    >
-      <fieldset className="popup__info">
-        <label className="popup__label">
-          <input
-            type="url"
-            placeholder="Ссылка на изображение"
-            name="avatar"
-            id="avatar__link"
-            className="popup__input"
-            value={values.avatar || ''}
-            onChange={handleChange}
-            required
-          />
-          <span className="popup__error" id="avatar__link-error">
-            {errors.avatar || ''}
-          </span>
-        </label>
-      </fieldset>
+      onClose={onClose}>
+      <input type="url" ref={avatarRef} className="popup__input" id="avatar"
+        placeholder="Ссылка на аватар" required />
+      <span id="avatar-error" className="popup__error" />
     </PopupWithForm>
   )
 }
+
+export default EditAvatarPopup;

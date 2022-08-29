@@ -1,31 +1,39 @@
-import { useContext } from 'react';
-import Card from './Card.js';
-import { currentUserContext } from '../contexts/CurrentUserContext.js';
+import React from 'react';
+import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-export default function Main({ cards, onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardDelete, onCardLike }) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete, cards }) {
 
-  const currentUser = useContext(currentUserContext); // подписываемся на контекст
+    const currentUser = React.useContext(CurrentUserContext);
 
-  return (
-    <main className="main page__main">
-      <section aria-label="блок с профилем пользователя" className="profile main__profile" >
-        <div className="profile__avatar" style={{ backgroundImage: `url(${currentUser.avatar})` }}  onClick={onEditAvatar}></div>
-        <div className="profile__info">
-          <h1 className="profile__name">{currentUser.name}</h1>
-          <p className="profile__job">{currentUser.about}</p>
-          <button id="profile__edit-button" type="button" className="profile__edit-button" onClick={onEditProfile}></button>
-        </div>
-        <button id="profile__add-button" type="button" className="profile__add-button" onClick={onAddPlace}></button>
-      </section>
-      <section aria-label="блок с фото-карточками" className="elements">
-        <ul className="elements__list">
-          {cards.map(card => {
-            return(
-              <Card key={card._id} card={card} onCardClick={onCardClick} onCardDelete={onCardDelete} onCardLike={onCardLike}/>
-            );
-          })}
-        </ul>
-      </section>
-    </main>
-  );
+    return (
+        <main className="content">
+            <section className="profile">
+                <div style={{ backgroundImage: `url(${currentUser.avatar})` }} alt="фотография профиля" className="profile__avatar"></ div>
+                <button onClick={onEditAvatar} type="button" className="profile__edit"></button>
+                <div className="profile__info">
+                    <div className="profile__container">
+                        <h1 className="profile__title">{currentUser.name}</h1>
+                        <button onClick={onEditProfile} className="profile__edit-button" type="button" aria-label="редактировать"></button>
+                    </div>
+                    <p className="profile__subtitle">{currentUser.about}</p>
+                </div>
+                <button onClick={onAddPlace} className="profile__add-button" type="button" aria-label="добавить"></button>
+            </section>
+
+            <section className="cards">
+                <ul className="cards__grid">
+                    {cards.map((item) => (
+                        <Card
+                            card={item}
+                            key={item._id}
+                            onCardClick={onCardClick}
+                            onCardLike={onCardLike}
+                            onCardDelete={onCardDelete} />))}
+                </ul>
+            </section>
+        </main>
+    )
 }
+
+export default Main;

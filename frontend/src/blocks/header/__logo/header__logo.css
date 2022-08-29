@@ -1,15 +1,24 @@
 .header__logo {
-  max-width: 142px;
-  transition: opacity .3s ease;
-  opacity: 1;
+	background-size: cover;
+	max-width: 142px;
+	min-height: 33px;
+	margin: 0;
+	padding: 0;
+	/*padding-top: 45px;
+	padding-bottom: 41px; */
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+	.header__logo {
+		max-width: 103.74px;
+		min-height: 24.4px;
+		padding-top: 28px;
+		padding-left: 27px;
+		padding-bottom: 31.6px;
+	}
 }
 
 .header__logo:hover {
-  opacity: .6;
-}
-
-@media screen and (max-width: 500px) {
-  .header__logo {
-    max-width: 104px;
-  }
+	opacity: .3;
+	cursor: pointer;
 }

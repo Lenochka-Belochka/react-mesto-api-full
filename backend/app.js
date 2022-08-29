@@ -1,39 +1,60 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
 const mongoose = require('mongoose');
-const rateLimit = require('express-rate-limit');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const router = require('./routes/routes');
-const errorHandler = require('./middlewares/error-handler');
+const bodyParser = require('body-parser');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-// Слушаем 4000 порт
-const { PORT = 4000 } = process.env;
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // за 15 минут
-  max: 1000, // можно совершить максимум 1000 запросов с одного IP
-});
-
 const app = express();
+const { validateLogin, validateUser } = require('./utils/validation');
+const { login, createUsers } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+const users = require('./routes/users');
+const cards = require('./routes/cards');
+const NotFoundError = require('./errors/NotFoundError');
 
-app.use(cors());
+const { ERROR_SERVER } = require('./utils/const');
 
-app.use(helmet()); // настраиваем заголовки
-app.use(limiter); // подключаем rate-limiter
-
-app.use(bodyParser.json()); // для собирания JSON-формата
-
-app.use(requestLogger);
-app.use(router);
-app.use(errorLogger);
-
-app.use(errors()); // обработчик ошибок celebrate
-app.use(errorHandler); // мидлвара централизованного обработчика ошибок
+const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(requestLogger); // подключаем логгер запросов
+app.use(cors());
+
+// Краш-тест сервера
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateUser, createUsers);
+
+app.use(auth);
+
+app.use('/', users);
+app.use('/', cards);
+
+app.use((req, res, next) => {
+  next(new NotFoundError('К сожалению, запращиваемый ресурс не найден'));
+});
+
+app.use(errorLogger); // подключаем логгер ошибок
+
+app.use(errors()); // обработчик ошибок celebrate
+
+// централизованный обработчик ошибок
+app.use((err, req, res, next) => {
+  const { statusCode = ERROR_SERVER, message } = err;
+  const errorMessage = (statusCode === ERROR_SERVER) ? 'Ошибка на сервере' : message;
+  res.status(statusCode).send({ message: errorMessage });
+  next();
+});
 
 app.listen(PORT);

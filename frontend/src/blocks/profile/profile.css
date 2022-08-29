@@ -1,12 +1,15 @@
 .profile {
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  color: white;
-  display: flex;
-  align-items: center;
+	margin: 0 auto;
+	display: flex;
+	justify-content: flex-start;
+	max-width: 882px;
+	position: relative;
+	flex-wrap: wrap;
 }
 
-@media screen and (max-width:500px) {
-  .profile {
-    flex-direction: column;
-  }
+@media screen and (min-width: 320px) and (max-width: 767px) {
+	.profile {
+		flex-direction: column;
+		align-items: center;
+	}
 }

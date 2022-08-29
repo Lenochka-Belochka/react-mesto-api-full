@@ -1,47 +1,30 @@
-import logo from '../images/logo.svg';
-import { Link, Switch, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from "../images/logo.svg";
 
-export default function Header({ email, onSignOut }) {
-  const [isClicked, setIsClicked] = useState(false);
+function Header({ userEmail, onSignOut }) {
+  const location = useLocation();
+  let {email} = userEmail || {};
 
-  function handleClickBurger() {
-    setIsClicked(!isClicked);
-  }
-  // Без контроля ширины окна просмотра, если в мобильной версии закрыть бургер меню и развернуть большой экран, то поле имейла и кнопка имеют display: none
-  const isMobile = useMediaQuery({ query: `(max-width: 500px)` });
+  return (
+    <header className="header">
+      <img className="header__logo" src={logo} alt="логотип проекта Место" />
 
-  useEffect(() => {
-    if (isMobile) {
-      setIsClicked(true);
-    } else {
-      setIsClicked(false);
-    }
-  }, [isMobile]);
+      <div className={`header__info ${location.pathname === '/' && "header__info_inactive"}`}>
+        {location.pathname === '/' ?
+          <>
+            <div className="header__email">{email}</div>
+            <Link onClick={onSignOut} className="header__signout" to={'/signin'}>Выйти</Link>
+          </>
+          : location.pathname === '/signin' ?
+            <Link className="header__signout" to={'/signup'}>Регистрация</Link>
+            : location.pathname === '/signup' ?
+              <Link className="header__signout" to={'/signin'}>Войти</Link> : ""}
+      </div>
 
-  return(
-    <header className="header page__header">
-      <Link to="/" className="header__logo-link">
-        <img src={logo} alt="логотип" className="header__logo" />
-      </Link>
-      <Switch>
-        <Route path="/signin">
-          <Link className="header__link" to="/signup">Регистрация</Link>
-        </Route>
-        <Route path="/signup">
-          <Link className="header__link" to="/signin">Войти</Link>
-        </Route>
-        <Route exact path="/">
-          {!isClicked && (
-            <div className="header__info">
-              <p className="header__email">{email}</p>
-              <button className="header__button" onClick={onSignOut}>Выйти</button>
-            </div>
-          )}
-          <button className={isClicked ? "header__burger-button" : "header__burger-close"} onClick={handleClickBurger}></button>
-        </Route>
-      </Switch>
     </header>
-  );
+
+  )
 }
+
+export default Header;

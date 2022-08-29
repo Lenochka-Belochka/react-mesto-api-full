@@ -1,110 +1,91 @@
-const onError = res => {
-  if (res.ok) {
-    return res.json();
-  }
-
-  return Promise.reject(`Ошибка: ${res.status}`);
-};
-
 class Api {
-  constructor({baseUrl, headers}) {
+  constructor({ baseUrl }) {
     this._url = baseUrl;
-    this._headers = headers;
   }
 
-  _getHeaders() {
-    const jwt = localStorage.getItem('jwt');
+  get _headers() {
     return {
-      'Authorization': `Bearer ${jwt}`,
-      ...this._headers,
-    };
+        authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+    }
+}
+
+  _checkServerResponse(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
   }
 
-  getInitialCards() { // получаем карточки с сервера
+  getProfile() {
+    return fetch(`${this._url}/users/me`, {
+      headers: this._headers
+    })
+      .then(this._checkServerResponse);
+  }
+
+  getCards() {
     return fetch(`${this._url}/cards`, {
-      method: 'GET',
-      headers: this._getHeaders()
+      headers: this._headers
     })
-      .then(onError);
+      .then(this._checkServerResponse);
   }
 
-  getUserInfo() {  // получаем данные о пользователе с сервера
+  editProfile(name, about) {
     return fetch(`${this._url}/users/me`, {
-      method: 'GET',
-      headers: this._getHeaders()
-    })
-      .then(onError);
-  }
-
-  renderUserAndCards() { // если оба промиса зарезолвены - верни массив этих промисов
-    return Promise.all([this.getUserInfo(), this.getInitialCards()])
-  }
-
-  setUserInfo(info) { // записываем данные пользователя на сервер
-    return fetch(`${this._url}/users/me`, {
-      method: 'PATCH',
-      headers: this._getHeaders(),
+      method: "PATCH",
+      headers: this._headers,
       body: JSON.stringify({
-        name: info.name,
-        about: info.about
+        name,
+        about
+      }),
+    })
+      .then(this._checkServerResponse);
+  }
+
+  addCard(name, link) {
+    return fetch(`${this._url}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name,
+        link
       })
     })
-    .then(onError)
+      .then(this._checkServerResponse)
   }
 
-  addCard(data) { // добавляем карточку на сервер
-    return fetch(`${this._url}/cards`, {
-      method: 'POST',
-      headers: this._getHeaders(),
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link
-      })
+  deleteCard(id) {
+    return fetch(`${this._url}/cards/${id}`, {
+      method: "DELETE",
+      headers: this._headers
     })
-      .then(onError);
+      .then(this._checkServerResponse)
   }
 
-  setUserAvatar(input) { // записываем аватарку на сервер
+  changeLikeCardStatus(id, isLiked) {
+    return fetch(`${this._url}/cards/${id}/likes`, {
+      method: isLiked ? 'PUT' : 'DELETE',
+      headers: this._headers
+    })
+      .then(this._checkServerResponse)
+  }
+
+  changeAvatar(avatar) {
     return fetch(`${this._url}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._getHeaders(),
+      method: "PATCH",
+      headers: this._headers,
       body: JSON.stringify({
-        avatar: input.avatar
-      })
+        avatar
+      }),
     })
-    .then(onError)
-  }
-
-  setLike(data) { // отправляем лайк на сервер
-    return fetch(`${this._url}/cards/${data._id}/likes`, {
-      method: 'PUT',
-      headers: this._getHeaders()
-    })
-      .then(onError);
-  }
-
-  deleteLike(data) { // убираем лайк с сервера
-    return fetch(`${this._url}/cards/${data._id}/likes`, {
-      method: 'DELETE',
-      headers: this._getHeaders()
-    })
-      .then(onError);
-  }
-
-  deleteCard(data) { // удаление карточки
-    return fetch(`${this._url}/cards/${data._id}`, {
-      method: 'DELETE',
-      headers: this._getHeaders()
-    })
-      .then(onError);
+      .then(this._checkServerResponse);
   }
 }
 
-const api = new Api({ // создаём экземляр класса работающего с API сервера
-  baseUrl: 'https://mesto.back.project.nomoredomains.sbs',
-  headers: {
-    'Content-Type': 'application/json'
-  }
+const api = new Api({
+  baseUrl: "https://mesto.back.project.nomoredomains.sbs",
 });
 
 export default api;

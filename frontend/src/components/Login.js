@@ -1,64 +1,38 @@
-import { useEffect } from 'react';
-import useFormWithValidation from '../hooks/useFormWithValidation.jsx';
+import React, { useState } from 'react';
+import Auth from './Auth.js';
 
-export default function Login({ onLogin }) {
-  const {values, handleChange, resetForm, errors, isValid} = useFormWithValidation();
+function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onLogin(values);
+  function handleEmail(evt) {
+    setEmail(evt.target.value)
   }
 
-  useEffect(() => {
-    resetForm();
-  }, [resetForm]);
+  function handlePassword(evt) {
+    setPassword(evt.target.value)
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onLogin(password, email)
+  }
 
   return (
-    <div className="register page__register">
-      <h2 className="register__title">Вход</h2>
-      <form name="form_register" className="register__form" noValidate onSubmit={handleSubmit}>
-        <fieldset className="register__fieldset">
-          <label className="register__label">
-            <input
-              className="register__input"
-              type="email"
-              placeholder="Email"
-              name="email"
-              minLength="2"
-              maxLength="40"
-              value={values.email || ''}
-              onChange={handleChange}
-              required
-            />
-            <span className="register__error" id="email-error">
-              {errors.email || ''}
-            </span>
-          </label>
-          <label className="register__label">
-            <input
-              className="register__input"
-              type="password"
-              placeholder="Пароль"
-              name="password"
-              minLength="2"
-              maxLength="40"
-              value={values.password || ''}
-              onChange={handleChange}
-              required
-            />
-            <span className="register__error" id="password-error">
-              {errors.password || ''}
-            </span>
-          </label>
-        </fieldset>
-        <button
-          type="submit"
-          className={`register__button ${!isValid && 'register__button_disabled'}`}
-          disabled={!isValid}
-        >
-          Войти
-        </button>
-      </form>
-    </div>
+    <Auth title={'Вход'} name={'login'} onSubmit={handleSubmit}>
+      <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="email"
+        name="email" value={email || ''} onChange={handleEmail}
+        minLength="2" maxLength="40" required />
+      <span className="popup__error email-error"></span>
+
+      <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="password"
+        name="password" value={password || ''} onChange={handlePassword}
+        minLength="6" maxLength="200" required />
+      <span className="popup__error password-error"></span>
+
+      <button className={"popup__save popup__save_auth"} type="submit">Войти</button>
+    </Auth>
   )
 }
+
+export default Login; 
