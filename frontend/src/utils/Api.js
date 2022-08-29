@@ -101,7 +101,7 @@ class Api {
 }
 
 const api = new Api({ // создаём экземляр класса работающего с API сервера
-  baseUrl: 'mesto.first.project.nomoredomains.sbs',
+  baseUrl: 'https://mesto.back.project.nomoredomains.sbs',
   headers: {
     'Content-Type': 'application/json'
   }

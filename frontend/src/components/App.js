@@ -10,8 +10,8 @@ import ImagePopup from './ImagePopup.jsx';
 import Main from './Main.jsx';
 import EditProfilePopup from './EditProfilePopup.jsx'
 import EditAvatarPopup from './EditAvatarPopup.jsx';
-import AddPlacePopup from './AddPlacePopup.jsx';
-import AcceptDeleteCardPopup from './AcceptDeleteCardPopup.jsx';
+import AddPlacePopup from './AddPlacePopup.js';
+import AcceptDeleteCardPopup from './AcceptDeleteCardPopup.js';
 import Loader from './Loader.jsx';
 import Login from './Login.jsx';
 import Register from './Register.jsx';

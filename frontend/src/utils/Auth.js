@@ -1,4 +1,4 @@
-const BASE_URL = "mesto.first.project.nomoredomains.sbs";
+const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
 
 const onError = res => {
   if (res.ok) {
