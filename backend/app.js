@@ -12,7 +12,7 @@ const { createUser, login } = require('./controllers/users');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLoger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 5000 } = process.env;
 const app = express();
 
 app.use(requestLogger);
