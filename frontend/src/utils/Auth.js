@@ -1,42 +1,38 @@
-export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
+const BASE_URL = "mesto.first.project.nomoredomains.sbs";
 
-const HEADERS = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-}
+const onError = res => {
+  if (res.ok) {
+    return res.json();
+  }
 
-const getJson = (response) => {
-    if (response.ok) {
-        return response.json();
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
+
+export const register = (email, password) => {
+  return fetch(`${BASE_URL}/signup`, {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password, email })
+  })
+  .then(onError)
+};
+
+export const login = (email, password) => {
+  return fetch(`${BASE_URL}/signin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password, email })
+  })
+  .then(onError)
+};
+
+export const checkToken = jwt => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization" : `Bearer ${jwt}`
     }
-    throw new Error({ status: response.status });
-}
-
-export const registration = (email, password) => {
-    return fetch(`${BASE_URL}/signup`, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({ email, password })
-    })
-        .then(getJson)
+  })
+  .then(onError)
 };
-
-export const authorization = (email, password) => {
-    return fetch(`${BASE_URL}/signin`, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({ email, password })
-    })
-        .then(getJson)
-};
-
-export const checkTokenValidity = (token) => {
-    return fetch(`${BASE_URL}/users/me`, {
-        method: 'GET',
-        headers: {
-            ...HEADERS,
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then(getJson)
-}

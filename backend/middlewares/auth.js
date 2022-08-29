@@ -1,22 +1,24 @@
-require('dotenv').config();
-
+const { JWT_SECRET = 'dev-key' } = process.env;
 const jwt = require('jsonwebtoken');
-const AuthError = require('../errors/AuthError');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
-
+// мидлвара авторизации - проверяет наличие токена и верифицирует его
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
+
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AuthError('Необходима авторизация');
+    next(new UnauthorizedError('Необходима авторизация.'));
   }
-  const token = String(req.headers.authorization).replace('Bearer ', '');
+
+  const token = authorization.replace('Bearer ', '');
   let payload;
+
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    throw new AuthError('Необходима авторизация');
+    next(new UnauthorizedError('Необходима авторизация.'));
   }
-  req.user = payload;
-  return next();
+  req.user = payload; // записываем пейлоуд в объект запроса
+
+  next();
 };

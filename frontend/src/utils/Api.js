@@ -1,103 +1,110 @@
-class Api {
-    constructor({ address }) {
-      this.address = address
-      }
-  
-      _checkServerStatus(res) {
-        return res.ok ? res.json() : Promise.reject(new Error(`Ошибка: ${res.status}`));
-      }
-  
-      getInitialCards() {
-          return fetch(`${this.address}/cards`, {
-            headers: {
-              authorization: this.getToken(),
-            },
-          })
-              .then(this._checkServerStatus);
-      }
-  
-      getUserInfo() {
-          return fetch(`${this.address}/users/me`, {
-            headers: {
-              authorization: this.getToken(),
-            },
-          })
-              .then(this._checkServerStatus)
-      }
-  
-      setUserInfo(data) {
-          return fetch(`${this.address}/users/me`, {
-              method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: this.getToken(),
-            },
-              body: JSON.stringify({
-                  name: data.name,
-                  about: data.about
-              })
-          })
-              .then(this._checkServerStatus)
-      }
-  
-      postNewCard({ name, link }) {
-          return fetch(`${this.address}/cards`, {
-              method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: this.getToken(),
-            },
-              body: JSON.stringify({
-				name,
-				link
-              })
-          })
-              .then(this._checkServerStatus)
-      }
-  
-      deleteCard(id) {
-          return fetch(`${this.address}/cards/${id}`, {
-              method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: this.getToken(),
-            },
-          })
-              .then(this._checkServerStatus)
-      }
-  
-      changeLikeCardStatus(id, isLiked) {
-          const method = isLiked ? 'DELETE' : 'PUT';
-          return fetch(`${this.address}/cards/${id}/likes`, {
-              method,
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: this.getToken(),
-            },
-          })
-              .then(this._checkServerStatus)
-      }
-  
-      updateAvatar(link) {
-          return fetch(`${this.address}/users/me/avatar`, {
-              method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: this.getToken(),
-            },
-              body: JSON.stringify({
-                  avatar: link
-              })
-          })
-            .then(this._checkServerStatus)
-      }
-  
-    getToken() {
-      return `Bearer ${localStorage.getItem('token')}`
-    }
+const onError = res => {
+  if (res.ok) {
+    return res.json();
   }
-  
-  export const api = new Api({
-    address: 'https://mesto.back.project.nomoredomains.sbs',
-  });
-  
+
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
+
+class Api {
+  constructor({baseUrl, headers}) {
+    this._url = baseUrl;
+    this._headers = headers;
+  }
+
+  _getHeaders() {
+    const jwt = localStorage.getItem('jwt');
+    return {
+      'Authorization': `Bearer ${jwt}`,
+      ...this._headers,
+    };
+  }
+
+  getInitialCards() { // получаем карточки с сервера
+    return fetch(`${this._url}/cards`, {
+      method: 'GET',
+      headers: this._getHeaders()
+    })
+      .then(onError);
+  }
+
+  getUserInfo() {  // получаем данные о пользователе с сервера
+    return fetch(`${this._url}/users/me`, {
+      method: 'GET',
+      headers: this._getHeaders()
+    })
+      .then(onError);
+  }
+
+  renderUserAndCards() { // если оба промиса зарезолвены - верни массив этих промисов
+    return Promise.all([this.getUserInfo(), this.getInitialCards()])
+  }
+
+  setUserInfo(info) { // записываем данные пользователя на сервер
+    return fetch(`${this._url}/users/me`, {
+      method: 'PATCH',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        name: info.name,
+        about: info.about
+      })
+    })
+    .then(onError)
+  }
+
+  addCard(data) { // добавляем карточку на сервер
+    return fetch(`${this._url}/cards`, {
+      method: 'POST',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link
+      })
+    })
+      .then(onError);
+  }
+
+  setUserAvatar(input) { // записываем аватарку на сервер
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        avatar: input.avatar
+      })
+    })
+    .then(onError)
+  }
+
+  setLike(data) { // отправляем лайк на сервер
+    return fetch(`${this._url}/cards/${data._id}/likes`, {
+      method: 'PUT',
+      headers: this._getHeaders()
+    })
+      .then(onError);
+  }
+
+  deleteLike(data) { // убираем лайк с сервера
+    return fetch(`${this._url}/cards/${data._id}/likes`, {
+      method: 'DELETE',
+      headers: this._getHeaders()
+    })
+      .then(onError);
+  }
+
+  deleteCard(data) { // удаление карточки
+    return fetch(`${this._url}/cards/${data._id}`, {
+      method: 'DELETE',
+      headers: this._getHeaders()
+    })
+      .then(onError);
+  }
+}
+
+const api = new Api({ // создаём экземляр класса работающего с API сервера
+  baseUrl: 'mesto.first.project.nomoredomains.sbs',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+export default api;

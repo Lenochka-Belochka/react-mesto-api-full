@@ -1,7 +1,5 @@
 .elements {
-  padding-top: 51px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px 17px;
-  justify-content: space-around;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  color: black;
+  width: 100%;
 }
