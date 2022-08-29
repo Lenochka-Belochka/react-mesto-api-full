@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { currentUserContext } from '../contexts/CurrentUserContext.js';
 import avatar from '../images/avatar.png';
-import api from '../utils/api.js';
+import api from '../utils/Api.js';
 import * as auth from '../utils/auth.js';
 import Footer from './Footer.jsx';
 import Header from './Header.jsx';
