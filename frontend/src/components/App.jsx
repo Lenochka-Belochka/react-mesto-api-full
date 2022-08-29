@@ -3,7 +3,7 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { currentUserContext } from '../contexts/CurrentUserContext.js';
 import avatar from '../images/avatar.png';
 import api from '../utils/Api.js';
-import * as auth from '../utils/auth.js';
+import * as auth from '../utils/Auth.js';
 import Footer from './Footer.jsx';
 import Header from './Header.jsx';
 import ImagePopup from './ImagePopup.jsx';
