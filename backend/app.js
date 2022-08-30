@@ -15,12 +15,10 @@ const app = express();
 
 app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
-  useNewUrlParser: true,
-});
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(cors({
-  origin: 'https://mesto.first.project.nomoredomains.sbs',
+  origin: 'https://felaw.mesto.nomoreparties.sbs',
   credentials: true,
 }));
 

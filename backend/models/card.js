@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
-const { isURL } = require('validator');
+// const validator = require('validator');
 
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 2,
-    maxLength: 30,
+    maxlength: 30,
     required: true,
   },
   link: {
     type: String,
     required: true,
     validate: {
-      validator: (v) => isURL(v, { required_protocol: true }),
-      message: 'Неправильный формат URL',
+      validator(v) {
+        return /(:?(?:https?:\/\/)?(?:www\.)?)?[-a-z0-9]+\.\w/gi.test(v);
+      },
+      message: 'Неверный формат ссылки',
     },
   },
   owner: {
@@ -21,10 +23,10 @@ const cardSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
+  likes: {
+    type: [mongoose.Schema.Types.ObjectId],
     default: [],
-  }],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
