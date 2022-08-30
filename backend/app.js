@@ -1,5 +1,4 @@
 require('dotenv').config();
-const cors = require('cors');
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -7,6 +6,8 @@ const bodyParser = require('body-parser');
 const { errors, Joi, celebrate } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+
+const cors = require('cors');
 
 const app = express();
 
