@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const linkRegExp = require('../utils/constants');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -11,24 +10,28 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    validator(v) {
-      return linkRegExp.test(v);
+    validate: {
+      validator(v) {
+        return /^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/g.test(v);
+      },
+      message: 'Ошибка в url',
     },
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
   },
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      defaut: [],
       ref: 'user',
-      default: [],
     },
   ],
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
 });
 
