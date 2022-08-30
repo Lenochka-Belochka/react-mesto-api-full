@@ -1,91 +1,102 @@
 class Api {
-  constructor({ baseUrl }) {
-    this._url = baseUrl;
+  constructor(options) {
+    this._baseUrl = options.baseUrl;
+    this._headers = options.headers;
   }
 
-  get _headers() {
-    return {
-        authorization: `Bearer ${localStorage.getItem('jwt')}`,
-        'Content-Type': 'application/json'
-    }
-}
-
-  _checkServerResponse(res) {
+  _checkResult(res) {
     if (res.ok) {
       return res.json();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
     }
+    return Promise.reject(`Ошибка ${res.status}`);
   }
 
-  getProfile() {
-    return fetch(`${this._url}/users/me`, {
-      headers: this._headers
-    })
-      .then(this._checkServerResponse);
+  getUserInfo() {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
+    }).then((res) => this._checkResult(res));
   }
 
-  getCards() {
-    return fetch(`${this._url}/cards`, {
-      headers: this._headers
-    })
-      .then(this._checkServerResponse);
+  getInitialCards() {
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
+    }).then((res) => this._checkResult(res));
   }
 
-  editProfile(name, about) {
-    return fetch(`${this._url}/users/me`, {
+  setUserInfo(data) {
+    return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
       body: JSON.stringify({
-        name,
-        about
+        name: data.name,
+        about: data.about,
       }),
-    })
-      .then(this._checkServerResponse);
+    }).then((res) => this._checkResult(res));
   }
 
-  addCard(name, link) {
-    return fetch(`${this._url}/cards`, {
+  addNewCard(data) {
+    return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
       body: JSON.stringify({
-        name,
-        link
-      })
-    })
-      .then(this._checkServerResponse)
-  }
-
-  deleteCard(id) {
-    return fetch(`${this._url}/cards/${id}`, {
-      method: "DELETE",
-      headers: this._headers
-    })
-      .then(this._checkServerResponse)
-  }
-
-  changeLikeCardStatus(id, isLiked) {
-    return fetch(`${this._url}/cards/${id}/likes`, {
-      method: isLiked ? 'PUT' : 'DELETE',
-      headers: this._headers
-    })
-      .then(this._checkServerResponse)
-  }
-
-  changeAvatar(avatar) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar
+        name: data.name,
+        link: data.link,
       }),
-    })
-      .then(this._checkServerResponse);
+    }).then((res) => this._checkResult(res));
+  }
+
+  deleteCard(data) {
+    return fetch(`${this._baseUrl}/cards/${data}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
+    }).then((res) => this._checkResult(res));
+  }
+
+  handleLike(item, like) {
+    return fetch(`${this._baseUrl}/cards/${item}/likes`, {
+      method: like ? "DELETE" : "PUT",
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
+    }).then((res) => this._checkResult(res));
+  }
+
+  setUserAvatar(data) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": this._headers.contentType,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        avatar: data.avatar,
+      }),
+    }).then((res) => this._checkResult(res));
   }
 }
 
 const api = new Api({
   baseUrl: "https://mesto.back.project.nomoredomains.sbs",
+  headers: {
+    contentType: "application/json",
+  },
 });
 
 export default api;
