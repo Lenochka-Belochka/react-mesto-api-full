@@ -4,9 +4,9 @@ const BadRequest = require('../errors/BadRequest');
 const AccessError = require('../errors/AccessError');
 
 const postCard = (req, res, next) => {
-  const { name, link } = req.body;
+  const { name, link, createdAt, likes } = req.body;
   const owner = req.user._id;
-  Card.create({ name, link, owner })
+  Card.create({ name, link, createdAt, likes, owner })
     .then((data) => {
       res.status(200).send(data);
     })
