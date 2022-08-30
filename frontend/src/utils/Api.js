@@ -126,14 +126,14 @@ export class Api {
   }
   // создание пользователя
 
- register(email, password) {
+ register(password, email) {
   const request = this._baseUrl + "/signup";
 
   return (
     fetch(request, {
       method: "POST",
       headers: this._headers,
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ password, email }),
     })
       .then((res) => this._checkResponse(res))
   );
@@ -141,14 +141,14 @@ export class Api {
 
 // авторизация 
 
-login(email, password) {
+login(password, email) {
   const request = this._baseUrl + "/signin";
 
   return (
     fetch(request, {
       method: "POST",
       headers: this._headers,
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ password, email }),
     })
       .then((res) => this._checkResponse(res))
   );
