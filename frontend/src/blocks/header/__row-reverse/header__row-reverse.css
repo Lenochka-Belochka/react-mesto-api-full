@@ -1,6 +1,0 @@
-@media screen and (min-width: 550px) {
-  .header__row-reverse {
-    flex-direction: row-reverse;
-    justify-content: space-between;
-  }
-}

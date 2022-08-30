@@ -1,12 +1,8 @@
 .element {
-    width: 282px;
-    margin: 0;
-    position: relative;
-    box-sizing: border-box;
-}
-
-@media screen and (max-width: 950px) {
-    .element {
-        width: 100%;
-    }
+  position: relative;
+  display: grid;
+  grid-template-columns: 282px;
+  grid-template-rows: 282px 80px;
+  box-sizing: border-box;
+  overflow: hidden;
 }

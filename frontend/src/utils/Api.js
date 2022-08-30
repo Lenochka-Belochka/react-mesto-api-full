@@ -1,102 +1,115 @@
 class Api {
-  constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
-  }
-
-  _checkResult(res) {
-    if (res.ok) {
-      return res.json();
+    constructor({ url, headers }) {  // передаем url API и заголовок
+      this._url = url
+      this._headers = headers
     }
-    return Promise.reject(`Ошибка ${res.status}`);
-  }
 
-  getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: "GET",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
+    getAllData() {
+      return Promise.all([this.getInitialCards(), this.getUser()])
+    }
 
-  getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
+    _getHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Authorization': `Bearer ${token}`,
+        ...this._headers,
+      };
+    }
 
-  setUserInfo(data) {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        name: data.name,
-        about: data.about,
-      }),
-    }).then((res) => this._checkResult(res));
-  }
+    getUser() { // загружаем имя пользователя
+      return fetch(
+        `${this._url}users/me`,
+        {
+          headers: this._getHeaders(),
+        }
+      )
+        .then(onError)
+    }
 
-  addNewCard(data) {
-    return fetch(`${this._baseUrl}/cards`, {
-      method: "POST",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link,
-      }),
-    }).then((res) => this._checkResult(res));
-  }
+    setUserInfo(name, about) { // запрос на изменение данных пользователя метод PATCH
+      return fetch(
+        `${this._url}users/me`,
+        {
+          method: 'PATCH',
+          headers: this._getHeaders(),
+          body: JSON.stringify({
+            name,
+            about,
+          })
+        })
+        .then(onError)
+    }
 
-  deleteCard(data) {
-    return fetch(`${this._baseUrl}/cards/${data}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
+    getInitialCards() { // получить карточки метотд GET
+      return fetch(
+        `${this._url}cards`,
+        {
+          headers: this._getHeaders(),
+        }
+      )
+        .then(onError)
+    }
 
-  handleLike(item, like) {
-    return fetch(`${this._baseUrl}/cards/${item}/likes`, {
-      method: like ? "DELETE" : "PUT",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
+    createCard(card) { // создать карточку метотд POST
+      return fetch(
+        `${this._url}cards`,
+        {
+          method: 'POST',
+          headers: this._getHeaders(),
+          body: JSON.stringify({
+            name: card.name,
+            link: card.link,
+          })
+        })
+        .then(onError)
+    }
 
-  setUserAvatar(data) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        avatar: data.avatar,
-      }),
-    }).then((res) => this._checkResult(res));
+    deleteCard(id) { // удалить карточку метотд DELETE
+      return fetch(
+        `${this._url}cards/${id}`,
+        { 
+          method: 'DELETE',
+          headers: this._getHeaders(),
+        })
+        .then(onError)
+    }
+
+    changeLikeCardStatus(id, isLiked) { // добавить лайк метотд PUT
+      return fetch(
+        `${this._url}cards/${id}/likes`,
+        {
+          method: isLiked ? 'DELETE' : 'PUT',
+          headers: this._getHeaders(),
+        })
+        .then(onError)
+    }
+
+    setUserAvatar(avatar) { // запрос на изменение аватара пользователя, метод PATCH
+      return fetch(
+        `${this._url}users/me/avatar`,
+        {
+          method: 'PATCH',
+          headers: this._getHeaders(),
+          body: JSON.stringify({
+            avatar
+          }),
+        })
+        .then(onError)
+    }
+}
+
+const onError = res => {
+  if (res.ok) {
+    return res.json()
   }
+  return Promise.reject(`Произошла ошибка ${res.status} ${res.statusText}`)
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.back.project.nomoredomains.sbs",
+  url: 'https://mesto.back.project.nomoredomains.sbs',
   headers: {
-    contentType: "application/json",
-  },
-});
+    'Content-Type': 'application/json',
+  }
+})
 
-export default api;
+export default api

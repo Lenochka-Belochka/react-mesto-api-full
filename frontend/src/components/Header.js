@@ -1,78 +1,34 @@
-import React from "react";
-import logo from "../images/logo.svg";
-import { NavLink, useLocation } from "react-router-dom";
+import { Switch, Route, Link } from 'react-router-dom'
 
-function Header(props) {
-  const location = useLocation();
-  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
+//import images 
+import logoImg from '../images/logo.svg'
 
-  function handleToggleMenu() {
-    setMenuIsOpen(!menuIsOpen);
-  }
-
-  function handleSignOut() {
-    setMenuIsOpen(false);
-    props.onSignOut();
-  }
+function Header({ onSingOut, userEmail }) {
   return (
-    <header
-      className={props.loggedIn ? "header header__row-reverse" : "header"}
-    >
-      {props.loggedIn && (
-        <div
-          className={
-            menuIsOpen
-              ? "header__container header__container_opened"
-              : "header__container"
-          }
-        >
-          <address className="header__address">
-            {props.email && props.email}
-          </address>
-          <button
-            className="header__button"
-            type="button"
-            onClick={handleSignOut}
-          >
-            Выйти
-          </button>
-        </div>
-      )}
-      <div className="header__container-main">
-        <img
-          className={menuIsOpen ? "header__logo_opened" : "header__logo"}
-          src={logo}
-          alt="логотип сайта"
-        />
-        {props.loggedIn && (
-          <button
-            className={
-              menuIsOpen
-                ? "header__menu-button header__menu-button_opened"
-                : "header__menu-button"
-            }
-            type="button"
-            aria-label="кнопка меню"
-            onClick={handleToggleMenu}
-          />
-        )}
-        {!props.loggedIn && (
-          <nav>
-            {location.pathname === "/signin" && (
-              <NavLink className="header__navlink" to="/signup">
-                Регистрация
-              </NavLink>
-            )}
-            {location.pathname === "/signup" && (
-              <NavLink className="header__navlink" to="/signin">
-                Войти
-              </NavLink>
-            )}
-          </nav>
-        )}
-      </div>
+    <header className="header root__header">
+      <img src={logoImg} alt="Логотип" className="logo root__logo" />
+      <Switch>
+        <Route path="/sign-in">
+          <Link className="auth__link" to="/sign-up">
+            Регистрация
+          </Link>
+        </Route>
+        <Route path="/sign-up">
+          <Link className="auth__link" to="/sign-in">
+            Войти
+          </Link>
+        </Route>
+        <Route path="/">
+          <div>
+            <span className='auth__email'>{userEmail || ''}</span>
+            <Link onClick={onSingOut} className="auth__link auth__link_singout" to="/sign-in">
+              Выйти
+            </Link>
+          </div>
+        </Route>
+      </Switch>
     </header>
   );
 }
 
-export default Header;
+export default Header

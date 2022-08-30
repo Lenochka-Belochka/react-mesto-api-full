@@ -1,43 +1,71 @@
-export const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
-
-const checkResult = (res) => {
-  if (res.ok) {
-    return res.json();
+class Auth {
+  constructor({ baseUrl }) {
+    this._baseUrl = baseUrl
   }
-  return Promise.reject(`Ошибка ${res.status}`);
-};
 
-export const register = (email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  }).then(checkResult);
-};
+  register(password, email) {
+    return fetch(
+      `${this._baseUrl}/signup`,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password,
+          email
+        })
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .catch((err) => console.log(err));
+  }
 
-export const login = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  }).then(checkResult);
-};
+  login(password, email) {
+    return fetch(
+      `${this._baseUrl}/signin`,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password,
+          email
+        })
+      }
+    )
+    .then((res) => {
+      return res.json();
+    })
+  }
 
-export const getContent = () => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  }).then(checkResult);
-};
+  tokenValid(token) {
+    return fetch(
+      `${this._baseUrl}/users/me`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    )
+    .then(res => {
+      return res.json()
+    })
+  }
+}
+
+const auth = new Auth({
+  baseUrl: 'https://mesto.back.project.nomoredomains.sbs'
+})
+
+export default auth

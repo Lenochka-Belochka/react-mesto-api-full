@@ -1,105 +1,54 @@
-import { Link, withRouter } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-function Register({ onSubmit }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [actEmail, setActEmail] = useState(false);
-  const [actPass, setActPass] = useState(false);
-  const [emailErr, setEmailErr] = useState("Email не может быть пустым");
-  const [passErr, setPassErr] = useState("Пароль не может быть пустым");
-  const [valid, setValid] = useState(false);
+function Register({ onRegister }) {
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: ''
+  })
 
-  useEffect(() => {
-    if (emailErr || passErr) {
-      setValid(false);
-    } else {
-      setValid(true);
-    }
-  }, [emailErr, passErr]);
-
-  function emailHandler(e) {
-    setEmail(e.target.value);
-    const re =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!re.test(String(e.target.value).toLowerCase())) {
-      setEmailErr("Некорректный email");
-    } else {
-      setEmailErr("");
-    }
+  function handleChange(e) {
+    const {name, value} = e.target
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value
+    }))
   }
-
-  function passwordHandler(e) {
-    setPassword(e.target.value);
-    if (e.target.value.length < 4 || e.target.value.length > 16) {
-      setPassErr("Пароль должен быть длиннее 4 и не более 16 символов");
-      if (!e.target.value) {
-        setPassErr("Пароль не может быть пустым");
-      }
-    } else {
-      setPassErr("");
-    }
-  }
-
-  const blurHandler = (e) => {
-    switch (e.target.name) {
-      case "email":
-        setActEmail(true);
-        break;
-      case "password":
-        setActPass(true);
-        break;
-    }
-  };
 
   function handleSubmit(e) {
-    e.preventDefault();
-    onSubmit(email, password);
+    e.preventDefault()
+    onRegister(formValues.password, formValues.email)
   }
 
   return (
-    <div className="register">
-      <h2 className="register__title">Регистрация</h2>
-      <form className="register__container" name="form" onSubmit={handleSubmit}>
+    <div className='auth root__auth'>
+      <h3 className='auth__title'>Регистрация</h3>
+      <form onSubmit={handleSubmit} className='auth__form'>
         <input
-          onBlur={blurHandler}
-          name="email"
-          placeholder="Email"
-          type="email"
-          className="register__input"
-          value={email}
-          onChange={emailHandler}
-          autoComplete="off"
+          onChange={handleChange}
+          value={formValues.email || ''}
+          className='auth__input'
+          name='email'
+          type='email'
+          placeholder='Email'
           required
         />
-        {actEmail && emailErr && (
-          <span className="modal__error">{emailErr}</span>
-        )}
         <input
-          onBlur={blurHandler}
-          name="password"
-          placeholder="Пароль"
-          type="password"
-          className="register__input"
-          value={password}
-          onChange={passwordHandler}
+          onChange={handleChange}
+          value={formValues.password || ''}
+          className='auth__input'
+          name='password'
+          type='password'
+          placeholder='Пароль'
           required
-          autoComplete="current-password"
         />
-        {actPass && passErr && <span className="modal__error">{passErr}</span>}
-        <button
-          type="submit"
-          className={`register__button ${
-            !valid && "register__button_disabled"
-          }`}
-        >
-          Зарегистрироваться
-        </button>
-        <Link to="/signin" className="register__login hover">
-          Уже зарегистрированы? Войти
-        </Link>
+        <button type='submit' className='auth__button'>Зарегистрироваться</button>
       </form>
+      <Link to="./sign-in" className='auth__link'>
+        Уже зарегистрированы? Войти
+      </Link>
     </div>
-  );
+  )
 }
-export default withRouter(Register);
+
+export default Register
