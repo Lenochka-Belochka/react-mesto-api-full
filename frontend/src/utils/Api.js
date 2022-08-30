@@ -18,7 +18,7 @@ class Api {
 
     getUser() { // загружаем имя пользователя
       return fetch(
-        `${this._url}users/me`,
+        `${this._url}/users/me`,
         {
           headers: this._getHeaders(),
         }
@@ -28,7 +28,7 @@ class Api {
 
     setUserInfo(name, about) { // запрос на изменение данных пользователя метод PATCH
       return fetch(
-        `${this._url}users/me`,
+        `${this._url}/users/me`,
         {
           method: 'PATCH',
           headers: this._getHeaders(),
@@ -66,7 +66,7 @@ class Api {
 
     deleteCard(id) { // удалить карточку метотд DELETE
       return fetch(
-        `${this._url}cards/${id}`,
+        `${this._url}/cards/${id}`,
         { 
           method: 'DELETE',
           headers: this._getHeaders(),
@@ -76,7 +76,7 @@ class Api {
 
     changeLikeCardStatus(id, isLiked) { // добавить лайк метотд PUT
       return fetch(
-        `${this._url}cards/${id}/likes`,
+        `${this._url}/cards/${id}/likes`,
         {
           method: isLiked ? 'DELETE' : 'PUT',
           headers: this._getHeaders(),
@@ -86,7 +86,7 @@ class Api {
 
     setUserAvatar(avatar) { // запрос на изменение аватара пользователя, метод PATCH
       return fetch(
-        `${this._url}users/me/avatar`,
+        `${this._url}/users/me/avatar`,
         {
           method: 'PATCH',
           headers: this._getHeaders(),
@@ -106,7 +106,7 @@ const onError = res => {
 }
 
 const api = new Api({
-  url: 'https://mesto.back.project.nomoredomains.sbs',
+  url: 'https://mesto.back.project.nomoredomains.sbs/',
   headers: {
     'Content-Type': 'application/json',
   }
