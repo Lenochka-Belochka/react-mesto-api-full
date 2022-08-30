@@ -177,7 +177,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    api
+    auth
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -194,7 +194,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    api
+    auth
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
