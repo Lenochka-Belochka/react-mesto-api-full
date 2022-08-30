@@ -132,7 +132,7 @@ function App() {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     //запрос в API, получение обновлённых данных карточки
-    auth
+    api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
         setCards((state) =>
@@ -146,7 +146,7 @@ function App() {
 
   // обработчик удаления карточки
   function handleCardDelete(card) {
-    auth
+    api
       .deleteCard(card._id)
       .then(() => {
         setCards((cards) => cards.filter((c) => c._id !== card._id));
@@ -158,7 +158,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      auth
+      api
         .getInitialCards()
         .then((cards) => {
           console.log(cards);
@@ -233,7 +233,7 @@ function App() {
 
   // обработчик добавления  карточки
   function handleAddPlaceSubmit(cardData) {
-    auth
+    api
       .addCard(cardData)
       .then((newCard) => {
         setCards([newCard, ...cards]);

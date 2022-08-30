@@ -1,11 +1,11 @@
 import React from "react";
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 
-function Card(props) {
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   // проверка владельца
-  const isOwn = props.card.owner === currentUser._id;
+  const isOwn = card.owner === currentUser._id;
 
   // создаём переменную для кнопки удаления
   const cardDeleteButtonClassName = `element__button_delete ${
@@ -13,7 +13,7 @@ function Card(props) {
   }`;
 
   // лайк, поставленный текущим пользователем
-  const isLiked = props.card.likes.some(i => i === currentUser._id);
+  const isLiked = card.likes.some((i) => i === currentUser._id);
 
   // cоздаём переменную для кнопки лайка
   const cardLikeButtonClassName = `element__button ${
@@ -21,15 +21,15 @@ function Card(props) {
   }`;
 
   function handleClick() {
-    props.onCardClick(props.card);
+    onCardClick(card);
   }
 
   function handleLikeClick() {
-    props.onCardLike(props.card);
+    onCardLike(card);
   }
 
   function handleDeleteClick() {
-    props.onCardDelete(props.card);
+    onCardDelete(card);
   }
 
   return (
@@ -42,14 +42,14 @@ function Card(props) {
           onClick={handleDeleteClick}
         ></button>
         <img
-          src={props.card.link}
-          alt={props.card.name}
+          src={card.link}
+          alt={card.name}
           className="element__image"
           onClick={handleClick}
         />
       </div>
       <div className="element__item-description">
-        <h2 className="element__item-title">{props.card.name}</h2>
+        <h2 className="element__item-title">{card.name}</h2>
         <div className="element__like-group">
           <button
             className={cardLikeButtonClassName}
@@ -57,7 +57,7 @@ function Card(props) {
             aria-label="Like button"
             onClick={handleLikeClick}
           ></button>
-          <p className="element__likes-number">{props.card.likes.length}</p>
+          <p className="element__likes-number">{card.likes.length}</p>
         </div>
       </div>
     </li>
