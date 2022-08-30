@@ -1,6 +1,0 @@
-.popup__box {
-    box-sizing: border-box;
-    z-index: 1;
-    position: relative;
-    display: flex;
-}

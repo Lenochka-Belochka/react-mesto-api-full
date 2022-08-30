@@ -1,35 +1,42 @@
-export const baseUrl = "https://mesto.back.project.nomoredomains.sbs";
+export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
 
-function checkResponse(res) {
-  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+const HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 }
 
-export const register = (data) => {
-  return fetch(`${baseUrl}/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ password: data.password, email: data.email }),
-  }).then((res) => checkResponse(res));
+const getJson = (response) => {
+    if (response.ok) {
+        return response.json();
+    }
+    throw new Error({ status: response.status });
+}
+
+export const register = (email, password) => {
+    return fetch(`${BASE_URL}/signup`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
+    })
+        .then(getJson)
 };
 
-export const login = (data) => {
-  return fetch(`${baseUrl}/signin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ password: data.password, email: data.email }),
-  }).then((res) => checkResponse(res));
+export const authorization = (email, password) => {
+    return fetch(`${BASE_URL}/signin`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({ email, password })
+    })
+        .then(getJson)
 };
 
-export const getToken = (token) => {
-  return fetch(`${baseUrl}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      'Authorization': `Bearer ${token}`,
-    },
-  }).then((res) => checkResponse(res));
-};
+export const examinationValidationToken = (token) => {
+    return fetch(`${BASE_URL}/users/me`, {
+        method: 'GET',
+        headers: {
+            ...HEADERS,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(getJson)
+}

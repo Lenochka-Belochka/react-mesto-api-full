@@ -1,0 +1,17 @@
+.element__button {
+  width: 22px;
+  height: 19px;
+  box-sizing: border-box;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background-image: url(../../../images/places/Vector.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  transition: opacity 0.3s ease;
+}
+
+.element__button:hover {
+  opacity: 0.3;
+}

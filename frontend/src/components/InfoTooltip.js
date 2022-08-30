@@ -1,25 +1,40 @@
 import React from "react";
-import okTip from '../images/ok.svg';
-import notOkTip from '../images/not-ok.svg'
+import PopupWithoutForm from "./PopupWithoutForm";
 
-function InfoTooltip (props) {
-    return (
-<div
-      className={`popup popup_type_info-tip ${
-        props.isOpen ? "popup_opened" : ""
-      }`}
-    >
-      <div className='popup__container popup__container_type_info-tip'>
-        <button
-          className='popup__close-button popup__close-button_type_info-tip'
-          type="button"
-          onClick={props.onClose}
-        ></button>
-        <img className="popup__image-tip"  src={props.isSignedUp ? okTip : notOkTip} alt='подсказка' />
-        <h2 className="popup__info">{props.isSignedUp ? 'Вы успешно зарегистрировались' : 'Что-то пошло не так! Попробуйте еще раз.'}</h2>
-      </div>
-    </div>
-    )
+function InfoTooltip(props) {
+  return (
+    <PopupWithoutForm isOpen={props.isOpen} onClose={props.onClose}>
+      {props.successReg ? (
+        <div className="popup__success-container">
+          <img
+            className="popup__success-picture"
+            src={props.success_pic}
+            alt="Pic success"
+          />
+
+          <p className="popup__explanation">
+            Вы успешно
+            <br />
+            зарегистрировались!
+          </p>
+        </div>
+      ) : (
+        <div className="popup__success-container">
+          <img
+            className="popup__success-picture"
+            src={props.unsuccess_pic}
+            alt="Pic unsuccess"
+          />
+
+          <p className="popup__explanation">
+            Что-то пошло не так!
+            <br />
+            Попробуйте еще раз.
+          </p>
+        </div>
+      )}
+    </PopupWithoutForm>
+  );
 }
 
 export default InfoTooltip;

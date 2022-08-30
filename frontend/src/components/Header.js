@@ -1,31 +1,34 @@
 import React from "react";
-import logo from '../images/header__logo.svg';
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Link, Switch } from "react-router-dom";
 
-function Header (props) {
-    return (
-      <header className="header">
-        <img
-          className="header__logo"
-          alt="лого"
-          src={logo}
-        />
-        <nav className="header__nav"> 
+function Header(props) {
+  return (
+    <header className="header">
+      <img className="header__logo" src={props.logo} alt="Лого Mesto Russia" />
+      <div className="header__authorization">
         <p className="header__email">{props.email}</p>
         <Switch>
-          <Route exact path='/'>
-        <Link to='/signin' className="header__name" onClick={props.exit}>Выйти</Link>  
-        </Route>
-        <Route path='/signin'>
-        <Link to='/signup' className="header__name">Регистрация</Link> 
-        </Route>
-        <Route path='/signup'>
-        <Link to='/signin' className="header__name">Войти</Link>
-        </Route>
+          <Route exact path="/">
+            <p className="header__link" onClick={props.onSignOut}>
+              Выйти
+            </p>
+          </Route>
+
+          <Route path="/signup">
+            <Link to="/signin" className="header__link">
+              Войти
+            </Link>
+          </Route>
+
+          <Route path="/signin">
+            <Link to="/signup" className="header__link">
+              Регистрация
+            </Link>
+          </Route>
         </Switch>
-        </nav>
-      </header>
-    );
+      </div>
+    </header>
+  );
 }
 
 export default Header;
