@@ -69,29 +69,8 @@ function App() {
     history.push("/signin");
   }
 
-useEffect(() => {
-    const token = localStorage.getItem("token");
-    Promise.all([api.getUserProfile(), api.getInitialCards()])
-      .then(([user, card]) => {
-        setCurrentUser(user);
-        setCards(card);
-      })
-      .catch(err => console.log(err))
-    if (token) {
-      auth.examinationValidationToken(token)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserEmail(res.email);
-            history.push('/');
-          }
-        })
-        .catch(err => console.log(err))
-    }
-  }, []);
-  
-/*
-   if (loggedIn) {
+  useEffect(() => {
+    if (loggedIn) {
       api
         .getUserProfile()
         .then((userData) => {
@@ -123,7 +102,8 @@ useEffect(() => {
   useEffect(() => {
     checkToken();
   }, [loggedIn]);
-*/
+
+  
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -165,7 +145,7 @@ useEffect(() => {
           console.log(`Ошибка при запросе карточек: ${err}!`);
         });
     }
-  }, [loggedIn]);
+  }, [loggedIn, history]);
 
   // переменная состояния (большая картинка)
   const [selectedCard, setSelectedCard] = React.useState({});
