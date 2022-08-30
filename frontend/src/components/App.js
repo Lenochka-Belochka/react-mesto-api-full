@@ -210,7 +210,7 @@ function App() {
 
   // обработчик добавления  карточки
   function handleAddPlaceSubmit(cardData) {
-    api
+    auth
       .addCard(cardData)
       .then((newCard) => {
         setCards([newCard, ...cards]);
