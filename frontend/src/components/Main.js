@@ -1,47 +1,68 @@
-//import images
-import { useContext } from 'react'
-import editImg from '../images/icon-edit.svg'
-import addImg from '../images/icon-add.svg'
-import Card from './Card'
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import { useContext } from "react";
+import Card from "../components/Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onImagePopup, onCardClick, cards, onCardLike, onCardDelete }) {
-  const currentUser = useContext(CurrentUserContext)
+function Main({
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  cards,
+}) {
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
-      <section className="profile content__profile">
-        <div className="profile__avatar-img">
-          <img src={currentUser.avatar} alt="Фото профеля" className="profile__avatar" />
-          <button onClick={onEditAvatar} title="Загрузить аватар" className="profile__avatar-button"></button>
-        </div>
-        <h1 className="profile__user-name">{currentUser.name}</h1>
-        <p className="profile__user-jop">{currentUser.about}</p>
-        <button onClick={onEditProfile} type="button" className="edit-profile profile__edit-profile">
-          <img src={editImg} alt="Редактировать профиль" className="edit-profile__icon" />
-        </button>
-        <button onClick={onAddPlace} type="button" className="add-button profile__add-button">
-          <img src={addImg} alt="Добавить" className="add-button__icon" />
-        </button>
-      </section>
+      <section className="profile">
+        <div className="profile__account">
+          <div className="profile__avatar-container">
+            <div
+              className="profile__avatar"
+              alt="аватар"
+              style={{ backgroundImage: `url(${currentUser.avatar})` }}
+            ></div>
 
-      <section className="elements content__elements">
-        {
-          cards.map(item => (
-            <Card
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
-              card={item}
-              key={item._id}
-              onImagePopup={onImagePopup}
-              onCardClick={onCardClick}
-            />
-          ))
-        }
+            <button
+              type="button"
+              className="profile__avatar-edit-btn"
+              onClick={onEditAvatar}
+            ></button>
+          </div>
+          <div className="profile__info">
+            <div className="profile__name-box">
+              <h1 className="profile__name">{currentUser.name}</h1>
+              <button
+                aria-label="изменить профиль"
+                className="profile__edit-button"
+                type="button"
+                onClick={onEditProfile}
+              ></button>
+            </div>
+            <p className="profile__description">{currentUser.about}</p>
+          </div>
+        </div>
+        <button
+          aria-label="добавить фото"
+          className="profile__add-button"
+          type="button"
+          onClick={onAddPlace}
+        ></button>
+      </section>
+      <section className="elements">
+        {cards.map((card) => (
+          <Card
+            key={card._id}
+            card={card}
+            onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+          />
+        ))}
       </section>
     </main>
   );
 }
 
-export default Main
+export default Main;

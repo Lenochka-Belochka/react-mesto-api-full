@@ -1,35 +1,50 @@
-// import components
-import { useState } from 'react'
+import React from "react";
 
 function Login({ onLogin }) {
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: ''
-  })
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  function handleChange(e) {
-    const {name, value} = e.target
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value
-    }))
+  function handleEmailPut(e) {
+    setEmail(e.target.value);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    onLogin(formValues.password, formValues.email)
+  function handlePasswordPut(e) {
+    setPassword(e.target.value);
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    onLogin({ password, email });
   }
 
   return (
-    <div className='auth root__auth'>
-      <h3 className='auth__title'>Вход</h3>
-      <form onSubmit={handleSubmit} className='auth__form'>
-        <input onChange={handleChange} className='auth__input' type='email' placeholder='Email' name='email' value={formValues.email || ''} required />
-        <input onChange={handleChange} className='auth__input' type='password' placeholder='Пароль' name='password' value={formValues.password || ''} required />
-        <button type='submit' className='auth__button'>Войти</button>
+    <section className="auth auth_type_login">
+      <h2 className="auth__title">Вход</h2>
+      <form className="auth__form" onSubmit={handleLogin}>
+        <div className="auth__input-container">
+          <input
+            name="email"
+            className="auth__input auth__input_type_email"
+            type="email"
+            required
+            placeholder="Email"
+            onChange={handleEmailPut}
+          />
+          <input
+            name="password"
+            className="auth__input auth__input_type_password"
+            type="password"
+            required
+            placeholder="Пароль"
+            onChange={handlePasswordPut}
+          />
+        </div>
+        <button type="submit" className="auth__submit-btn">
+          Войти
+        </button>
       </form>
-    </div>
-  )
+    </section>
+  );
 }
 
-export default Login
+export default Login;

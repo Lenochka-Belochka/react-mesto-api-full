@@ -1,8 +1,9 @@
 .element {
-  position: relative;
-  display: grid;
-  grid-template-columns: 282px;
-  grid-template-rows: 282px 80px;
-  box-sizing: border-box;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    background: #FFFFFF;
+    overflow: hidden;
+    position: relative;
 }

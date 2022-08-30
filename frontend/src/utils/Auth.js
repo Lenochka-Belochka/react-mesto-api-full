@@ -1,71 +1,35 @@
-class Auth {
-  constructor({ baseUrl }) {
-    this._baseUrl = baseUrl
-  }
+export const baseUrl = "https://mesto.back.project.nomoredomains.sbs";
 
-  register(password, email) {
-    return fetch(
-      `${this._baseUrl}/signup`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          password,
-          email
-        })
-      }
-    )
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-    })
-    .catch((err) => console.log(err));
-  }
-
-  login(password, email) {
-    return fetch(
-      `${this._baseUrl}/signin`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          password,
-          email
-        })
-      }
-    )
-    .then((res) => {
-      return res.json();
-    })
-  }
-
-  tokenValid(token) {
-    return fetch(
-      `${this._baseUrl}/users/me`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    )
-    .then(res => {
-      return res.json()
-    })
-  }
+function checkResponse(res) {
+  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 }
 
-const auth = new Auth({
-  baseUrl: 'https://mesto.back.project.nomoredomains.sbs'
-})
+export const register = (data) => {
+  return fetch(`${baseUrl}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: data.password, email: data.email }),
+  }).then((res) => checkResponse(res));
+};
 
-export default auth
+export const login = (data) => {
+  return fetch(`${baseUrl}/signin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: data.password, email: data.email }),
+  }).then((res) => checkResponse(res));
+};
+
+export const getToken = (token) => {
+  return fetch(`${baseUrl}/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,
+    },
+  }).then((res) => checkResponse(res));
+};

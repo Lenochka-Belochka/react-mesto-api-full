@@ -1,34 +1,31 @@
-import { Switch, Route, Link } from 'react-router-dom'
+import React from "react";
+import logo from '../images/header__logo.svg';
+import { Link, Route, Switch } from "react-router-dom";
 
-//import images 
-import logoImg from '../images/logo.svg'
-
-function Header({ onSingOut, userEmail }) {
-  return (
-    <header className="header root__header">
-      <img src={logoImg} alt="Логотип" className="logo root__logo" />
-      <Switch>
-        <Route path="/sign-in">
-          <Link className="auth__link" to="/sign-up">
-            Регистрация
-          </Link>
+function Header (props) {
+    return (
+      <header className="header">
+        <img
+          className="header__logo"
+          alt="лого"
+          src={logo}
+        />
+        <nav className="header__nav"> 
+        <p className="header__email">{props.email}</p>
+        <Switch>
+          <Route exact path='/'>
+        <Link to='/sign-in' className="header__name" onClick={props.exit}>Выйти</Link>  
         </Route>
-        <Route path="/sign-up">
-          <Link className="auth__link" to="/sign-in">
-            Войти
-          </Link>
+        <Route path='/sign-in'>
+        <Link to='/sign-up' className="header__name">Регистрация</Link> 
         </Route>
-        <Route path="/">
-          <div>
-            <span className='auth__email'>{userEmail || ''}</span>
-            <Link onClick={onSingOut} className="auth__link auth__link_singout" to="/sign-in">
-              Выйти
-            </Link>
-          </div>
+        <Route path='/sign-up'>
+        <Link to='/sign-in' className="header__name">Войти</Link>
         </Route>
-      </Switch>
-    </header>
-  );
+        </Switch>
+        </nav>
+      </header>
+    );
 }
 
-export default Header
+export default Header;

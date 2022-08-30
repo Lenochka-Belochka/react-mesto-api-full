@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { isURL } = require('validator');
+const linkRegExp = require('../utils/constants');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -11,11 +11,12 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    validate: [isURL, 'Ошибка валидации'],
+    validator(v) {
+      return linkRegExp.test(v);
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
     required: true,
   },
   likes: [

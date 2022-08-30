@@ -1,35 +1,40 @@
-import { useEffect, useRef } from 'react'
-import PopupWithForm from './PopupWithForm'
+import { useRef } from "react";
+import PopupWithForm from "./PopupWithForm";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
-  const avatar = useRef(null)
-
-  useEffect(() => {
-    avatar.current.value = ' '
-  }, [isOpen])
+export default function EditAvatarPopup(props) {
+  const avatarRef = useRef();
 
   function handleSubmit(e) {
-    e.preventDefault()
-    onUpdateAvatar({
-      avatar: avatar.current.value
-    })
-  }
+    e.preventDefault();
 
+    props.onUpdateAvatar(avatarRef.current.value);
+  }
   return (
     <PopupWithForm
+      name="change-avatar"
+      title="Обновить аватар"
+      button="Сохранить"
+      onClose={props.onClose}
+      isOpen={props.isOpen}
       onSubmit={handleSubmit}
-      isOpen={isOpen}
-      onClose={onClose}
-      buttonText='Отправить'
-      title='Обновить аватар'
-      name='edit-avatar'
     >
-      <input
-        ref={avatar}
-        id="avatar" type="url" name="link" placeholder="Ссылка на картинку" className="popup__input popup__input_avatar_url" required />
-      <span id="avatar-error" className="popup__error"></span>
+      <>
+        <div className="popup__input-container">
+          <input
+            ref={avatarRef}
+            name="avatar-url-input"
+            id="avatar-url-input"
+            className="popup__input popup__input_type_avatar-url"
+            type="url"
+            placeholder="Ссылка на картинку"
+            required
+          />
+          <span
+            id="avatar-url-input-error"
+            className="popup__input-error popup__input-error_visible"
+          ></span>
+        </div>
+      </>
     </PopupWithForm>
-  )
+  );
 }
-
-export default EditAvatarPopup
