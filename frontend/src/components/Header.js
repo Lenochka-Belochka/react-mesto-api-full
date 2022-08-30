@@ -14,13 +14,13 @@ function Header (props) {
         <p className="header__email">{props.email}</p>
         <Switch>
           <Route exact path='/'>
-        <Link to='/sign-in' className="header__name" onClick={props.exit}>Выйти</Link>  
+        <Link to='/signin' className="header__name" onClick={props.exit}>Выйти</Link>  
         </Route>
-        <Route path='/sign-in'>
-        <Link to='/sign-up' className="header__name">Регистрация</Link> 
+        <Route path='/signin'>
+        <Link to='/signup' className="header__name">Регистрация</Link> 
         </Route>
-        <Route path='/sign-up'>
-        <Link to='/sign-in' className="header__name">Войти</Link>
+        <Route path='/signup'>
+        <Link to='/signin' className="header__name">Войти</Link>
         </Route>
         </Switch>
         </nav>

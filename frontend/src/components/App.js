@@ -140,7 +140,7 @@ function App() {
         if (res) {
           setIsSignedUp(true);
           setIsInfoToolTipPopupOpen(true);
-          history.push("/sign-in");
+          history.push("/signin");
         } else {
           setIsSignedUp(false);
           setIsInfoToolTipPopupOpen(true);
@@ -176,7 +176,7 @@ function App() {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     setEmail("");
-    history.push("/sign-in");
+    history.push("/signin");
   };
 
   function checkToken() {
@@ -217,10 +217,10 @@ function App() {
               email={email}
             />
           </ProtectedRoute>
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login onLogin={handleLogin} />
           </Route>
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register onRegister={handleRegister} />
           </Route>
         </Switch>
