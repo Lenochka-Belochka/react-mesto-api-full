@@ -70,7 +70,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      api
+      auth
         .getUserProfile()
         .then((userData) => {
           console.log(userData);
@@ -82,6 +82,7 @@ function App() {
     }
   }, [loggedIn]);
 
+  
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
