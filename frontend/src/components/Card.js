@@ -13,7 +13,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   }`;
 
   // лайк, поставленный текущим пользователем
-  const isLiked = card.likes.some((i) => i === currentUser._id);
+  const isLiked = card.likes.some(i => i === currentUser._id);
 
   // cоздаём переменную для кнопки лайка
   const cardLikeButtonClassName = `element__button ${
