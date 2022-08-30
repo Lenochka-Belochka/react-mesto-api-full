@@ -18,6 +18,7 @@ const app = express();
 app.use(cookieParser());
 
 app.use(requestLogger);
+
 app.use(cors());
 
 app.get('/crash-test', () => {
