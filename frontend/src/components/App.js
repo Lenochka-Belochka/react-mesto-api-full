@@ -86,7 +86,7 @@ function App() {
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
-      Auth.getContent(jwt)
+      auth.getContent(jwt)
         .then((res) => {
           setUserEmail(res.data.email);
           setLoggedIn(true);
@@ -103,7 +103,7 @@ function App() {
     checkToken();
   }, [loggedIn]);
 
-  
+
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
