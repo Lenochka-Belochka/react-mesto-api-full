@@ -221,7 +221,7 @@ function App() {
   }
 
   function handleLoginSubmit(email, password) {
-    auth.authorization(email, password)
+    auth.login(email, password)
     .then((res) => {
       setLoggedIn(true);
       localStorage.setItem("jwt", res.token);
