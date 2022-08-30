@@ -98,11 +98,11 @@ function App() {
     }
   }
 
-  //
+  /*
   useEffect(() => {
     checkToken();
   }, [loggedIn]);
-
+*/
 
   //  лайк
   function handleCardLike(card) {
