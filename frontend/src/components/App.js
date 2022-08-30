@@ -83,30 +83,6 @@ function App() {
   }, [loggedIn]);
 
 
-  const checkToken = React.useCallback(
-		() => {
-			const token = localStorage.getItem('jwt');
-			auth.getContent(token)
-				.then((r) => {
-					setUserEmail(r.email)
-					setLoggedIn(true);
-					history.push('/')
-				})
-				.catch((r) => {
-					console.log(r);
-				})
-		}, [history]
-	)
-
-	React.useEffect(
-		() => {
-			const token = localStorage.getItem('jwt');
-			if (token) {
-				checkToken()
-			}
-		}, [checkToken]
-	)
-  /*
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
@@ -125,7 +101,7 @@ function App() {
   useEffect(() => {
     checkToken();
   }, [loggedIn]);
-*/
+
 
   //  лайк
   function handleCardLike(card) {
