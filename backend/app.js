@@ -18,15 +18,15 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://localhost:27017/mestodb", {
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 });
 
 const options = {
   origin: [
     "http://localhost:3000",
-    "http://mesto-frontend.tarstabor.nomoredomains.rocks",
-    "https://mesto-frontend.tarstabor.nomoredomains.rocks",
+    "https://mesto.first.project.nomoredomains.sbs",
+    "https://mesto.first.project.nomoredomains.sbs",
   ],
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   preflightContinue: false,
@@ -35,7 +35,7 @@ const options = {
   credentials: true,
 };
 
-app.use("*", cors(options));
+app.use('*', cors(options));
 
 app.use(requestLogger);
 
