@@ -117,8 +117,11 @@ export class Api {
       .then((res) => this._checkResponse(res))
   }
   */
-  changeLikeCardStatus(cardId, like) {
-    const method = like ? "DELETE" : "PUT";
+  changeLikeCardStatus(cardId, isLiked) {
+    const isLiked = cardId.likes.some((item) => {
+      return item === currentUser._id;
+    });
+    const method = isLiked ? "DELETE" : "PUT";
     const request = this._baseUrl + `/cards/${cardId}/likes`;
     return fetch(request, {
       method: method,
@@ -188,7 +191,6 @@ export const api = new Api({
   baseUrl: `https://mesto.back.project.nomoredomains.sbs`,
   headers: { 
   authorization: `Bearer ${localStorage.getItem('jwt')}`,
-  "Content-Type": "application/json"
  },
 });
 
