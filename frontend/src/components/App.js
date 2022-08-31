@@ -24,7 +24,6 @@ import InfoTooltip from "./InfoTooltip";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
-import cardsRouter from "../../../backend/routes/cards";
 
 function App() {
   // данные текущего пользователя
