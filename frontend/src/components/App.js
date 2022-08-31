@@ -24,6 +24,7 @@ import InfoTooltip from "./InfoTooltip";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
+import cardsRouter from "../../../backend/routes/cards";
 
 function App() {
   // данные текущего пользователя
@@ -134,8 +135,8 @@ function App() {
     api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
+        setCards((cards) =>
+          cards.map((c) => (c._id === card._id ? newCard : c))
         );
       })
       .catch((err) => {

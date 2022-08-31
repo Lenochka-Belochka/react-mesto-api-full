@@ -120,11 +120,9 @@ export class Api {
   changeLikeCardStatus(cardId, like) {
     const method = like ? "DELETE" : "PUT";
     const request = this._baseUrl + `/cards/${cardId}/likes`;
-    const newHeaders = this._headers;
-    newHeaders["Content-Type"] = "application/json";
     return fetch(request, {
       method: method,
-      headers: newHeaders,
+      headers: this._headers,
     }).then((res) => this._checkResponse(res));
   }
   // создание пользователя
