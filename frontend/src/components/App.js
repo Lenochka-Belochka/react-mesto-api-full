@@ -131,7 +131,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
     //запрос в API, получение обновлённых данных карточки
-    auth
+    api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
         setCards((cards) =>
@@ -157,7 +157,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      auth
+      api
         .getInitialCards()
         .then((cards) => {
           console.log(cards);
@@ -290,9 +290,9 @@ function App() {
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick}
-            cards={cards}
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
+            cards={cards}
           />
           <Route path="/signup">
             <Register
