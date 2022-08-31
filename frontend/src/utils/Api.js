@@ -19,7 +19,7 @@ export class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        authorization: `Bearer ${localStorage.getItem("jwt")}`,
         "Content-Type": "application/json",
       },
     }).then((res) => this._checkResponse(res));
@@ -30,7 +30,7 @@ export class Api {
     return fetch(`${this._baseUrl}/cards`, {
         method: "GET",
         headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
+          authorization: `Bearer ${localStorage.getItem("jwt")}`,
           "Content-Type": "application/json",
         },
     }).then((res) => this._checkResponse(res));
