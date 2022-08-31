@@ -1,43 +1,68 @@
 export const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
 
-const checkResult = (res) => {
+// Response processing
+function getResponseData(res) {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`Ошибка ${res.status}`);
-};
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
+    credentials: "include",
     headers: {
-      Accept: "application/json",
+      authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  }).then(checkResult);
+    body: JSON.stringify({
+      password,
+      email,
+    }),
+  })
+    .then((response) => {
+      return getResponseData(response);
+    })
+    .then((data) => {
+      return data;
+    });
 };
 
-export const login = (email, password) => {
+export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
-      Accept: "application/json",
+      authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  }).then(checkResult);
+    body: JSON.stringify({
+      password,
+      email,
+    }),
+  })
+    .then((response) => {
+      return getResponseData(response);
+    })
+    .then((data) => {
+      return data;
+    });
 };
 
-export const getContent = () => {
+export const getContent = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
-      Accept: "application/json",
+      authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     },
-    credentials: "include",
-  }).then(checkResult);
+  })
+    .then((response) => {
+      return getResponseData(response);
+    })
+    .then((res) => {
+      if (res) {
+        return res;
+      }
+    });
 };

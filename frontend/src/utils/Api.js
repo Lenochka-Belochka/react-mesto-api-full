@@ -1,102 +1,107 @@
-class Api {
+export class Api {
   constructor(options) {
-    this._baseUrl = options.baseUrl;
+    this._url = options.url;
     this._headers = options.headers;
   }
 
-  _checkResult(res) {
+  // Response processing
+  _getResponseData(res) {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(`Ошибка ${res.status}`);
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+
+  getListCard() {
+    return fetch(this._url + "/cards", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
+  }
+
+  postCard(text) {
+    return fetch(this._url + "/cards", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(text),
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
+  }
+
+  deleteCard(id) {
+    return fetch(this._url + "/cards/" + id, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return fetch(this._url + "/users/me", {
       method: "GET",
       headers: {
-        "Content-Type": this._headers.contentType,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
   }
 
-  getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
-
-  setUserInfo(data) {
-    return fetch(`${this._baseUrl}/users/me`, {
+  patchUserInfo(text) {
+    return fetch(this._url + "/users/me", {
       method: "PATCH",
       headers: {
-        "Content-Type": this._headers.contentType,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
-      credentials: "include",
-      body: JSON.stringify({
-        name: data.name,
-        about: data.about,
-      }),
-    }).then((res) => this._checkResult(res));
+      body: JSON.stringify(text),
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
   }
 
-  addNewCard(data) {
-    return fetch(`${this._baseUrl}/cards`, {
-      method: "POST",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link,
-      }),
-    }).then((res) => this._checkResult(res));
-  }
-
-  deleteCard(data) {
-    return fetch(`${this._baseUrl}/cards/${data}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
-
-  handleLike(item, like) {
-    return fetch(`${this._baseUrl}/cards/${item}/likes`, {
-      method: like ? "DELETE" : "PUT",
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
-      credentials: "include",
-    }).then((res) => this._checkResult(res));
-  }
-
-  setUserAvatar(data) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+  patchAvatar(url) {
+    return fetch(this._url + "/users/me/avatar", {
       method: "PATCH",
       headers: {
-        "Content-Type": this._headers.contentType,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
-      credentials: "include",
-      body: JSON.stringify({
-        avatar: data.avatar,
-      }),
-    }).then((res) => this._checkResult(res));
+      body: JSON.stringify(url),
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
+  }
+
+  changeLikeCardStatus(id, isLiked) {
+    return fetch(this._url + `/cards/${id}/likes`, {
+      method: isLiked ? "PUT" : "DELETE",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      return this._getResponseData(response);
+    });
   }
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.back.project.nomoredomains.sbs",
-  headers: {
-    contentType: "application/json",
-  },
+  url: "https://mesto.back.project.nomoredomains.sbs",
 });
 
 export default api;

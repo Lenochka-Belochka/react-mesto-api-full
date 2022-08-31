@@ -1,101 +1,87 @@
-import { withRouter } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-function Login({ onSubmit }) {
+function Login({ authorization }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [actEmail, setActEmail] = useState(false);
-  const [actPass, setActPass] = useState(false);
-  const [emailErr, setEmailErr] = useState("Email не может быть пустым");
-  const [passErr, setPassErr] = useState("Пароль не может быть пустым");
-  const [valid, setValid] = useState(false);
+  const [isVisiblePassword, setisVisiblePassword] = useState("password");
 
-  useEffect(() => {
-    if (emailErr || passErr) {
-      setValid(false);
-    } else {
-      setValid(true);
-    }
-  }, [emailErr, passErr]);
+  function handleVisibleChange() {
+    setisVisiblePassword(
+      isVisiblePassword === "password" ? "text" : "password"
+    );
+  }
 
-  function emailHandler(e) {
+  function handleEmailChange(e) {
     setEmail(e.target.value);
-    const re =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!re.test(String(e.target.value).toLowerCase())) {
-      setEmailErr("Некорректный email");
-    } else {
-      setEmailErr("");
-    }
   }
 
-  function passwordHandler(e) {
+  function handlePasswordChange(e) {
     setPassword(e.target.value);
-    if (e.target.value.length < 4 || e.target.value.length > 16) {
-      setPassErr("Пароль должен быть длиннее 4 и не более 16 символов");
-      if (!e.target.value) {
-        setPassErr("Пароль не может быть пустым");
-      }
-    } else {
-      setPassErr("");
-    }
   }
-
-  const blurHandler = (e) => {
-    switch (e.target.name) {
-      case "email":
-        setActEmail(true);
-        break;
-      case "password":
-        setActPass(true);
-        break;
-    }
-  };
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(email, password);
+    authorization(email, password);
+
+    setEmail("");
+    setPassword("");
   }
 
   return (
-    <div className="register">
-      <h2 className="register__title">Вход</h2>
-      <form className="register__container" name="form" onSubmit={handleSubmit}>
+    <>
+      <section className="authorization">
+        <h2 className="authorization__title">Вход</h2>
+
+      <form
+        name=""
+        action="#"
+        className="authorization__form"
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <input
-          onBlur={blurHandler}
+          id="email"
+          className="authorization__input"
           name="email"
+          type="text"
           placeholder="Email"
-          type="email"
-          className="register__input"
           value={email}
-          onChange={emailHandler}
+          onChange={handleEmailChange}
           autoComplete="off"
+          minLength="2"
+          maxLength="40"
           required
         />
-        {actEmail && emailErr && (
-          <span className="modal__error">{emailErr}</span>
-        )}
+
         <input
-          onBlur={blurHandler}
+          id="password"
           name="password"
+          type={isVisiblePassword}
           placeholder="Пароль"
-          type="password"
-          className="register__input"
           value={password}
-          onChange={passwordHandler}
+          onChange={handlePasswordChange}
+          className="authorization__input"
+          autoComplete="off"
+          minLength="2"
+          maxLength="200"
           required
         />
-        {actPass && passErr && <span className="modal__error">{passErr}</span>}
+        <h2
+          className="authorization__registered link-opacity"
+          style={{ textAlign: "center" }}
+          onClick={handleVisibleChange}
+        >
+          Показать пароль
+        </h2>
         <button
           type="submit"
-          className={`register__button ${
-            !valid && "register__button_disabled"
-          }`}
+          className="authorization__button link-opacity save-profile"
         >
           Войти
         </button>
       </form>
-    </div>
+    </section>
+    </>
   );
 }
-export default withRouter(Login);
+export default Login;

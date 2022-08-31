@@ -1,60 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
 
-function AddPlacePopup(props) {
-  const [values, setValues] = React.useState({ name: "", link: "" });
+  useEffect(() => {
+    setName("");
+    setLink("");
+  }, [isOpen]);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+  function handleLinkChange(e) {
+    setLink(e.target.value);
   }
 
-  React.useEffect(() => {
-    setValues({ name: "", link: "" });
-  }, [props.isOpen]);
-
   function handleSubmit(e) {
-    e.preventDefault(e);
-    props.onAddPlace({
-      name: values.name,
-      link: values.link,
-    });
+    e.preventDefault();
+    onAddPlace({ name, link });
   }
 
   return (
     <PopupWithForm
-      name="add"
-      title="Новое место"
-      buttonText="Создать"
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
+      title="Новое место"
+      name="add"
+      buttonText="Создать"
+      children
     >
       <input
-        id="placeInput"
-        className="modal__input"
-        name="name"
+        id="place"
+        name="form-place"
+        type="text"
         placeholder="Название"
+        value={name}
+        onChange={handleNameChange}
+        className="popup__input"
+        autoComplete="off"
         minLength="2"
         maxLength="30"
         required
-        autoComplete="off"
-        value={values.name}
-        onChange={handleChange}
       />
-      <span className="modal__error" id="placeInputError"></span>
+      <span className="place-error popup__input-error"></span>
       <input
-        id="linkInput"
+        id="link"
+        name="form-resource"
         type="url"
-        className="modal__input"
-        name="link"
         placeholder="Ссылка на картинку"
-        required
+        value={link}
+        onChange={handleLinkChange}
+        className="popup__input"
         autoComplete="off"
-        value={values.link}
-        onChange={handleChange}
+        required
       />
-      <span className="modal__error" id="linkInputError"></span>
+      <span className="link-error popup__input-error"></span>
     </PopupWithForm>
   );
 }

@@ -1,39 +1,39 @@
-import React from "react";
-
-function PopupWithForm(props) {
-  React.useEffect(() => {
-    function handleEscClose(e) {
-      if (e.key === "Escape") {
-        props.onClose();
-      }
-    }
-    if (props.isOpen) {
-      document.addEventListener("keydown", handleEscClose);
-    }
-    return () => {
-      document.removeEventListener("keydown", handleEscClose);
-    };
-  }, [props.isOpen, props.onClose]);
+function PopupWithForm({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  name,
+  buttonText,
+  children,
+}) {
   return (
-    <div
-      className={`modal modal-${props.name} ${props.isOpen && "modal_active"}`}
-    >
-      <div className="modal__inner">
-        <h2 className="modal__title">{props.title}</h2>
+    <section className={`popup ${name} ${isOpen ? "popup_opened" : ""}`}>
+      <div className="popup__container">
         <button
-          className="modal__close"
           type="button"
-          aria-label="закрытие попап"
-          onClick={props.onClose}
+          aria-label="Закрыть попап редактирования профиля"
+          className="popup__close-button link-opacity"
+          onClick={onClose}
         ></button>
-        <form className="form" name={props.name} onSubmit={props.onSubmit}>
-          {props.children}
-          <button className="modal__submit" type="submit">
-            {props.buttonText}
+        <h2 className="popup__title">{title}</h2>
+
+        <form
+          name={`${name}-form`}
+          action="#"
+          className="popup__form"
+          onSubmit={onSubmit}
+        >
+          {children}
+          <button
+            type="submit"
+            className="popup__save-button link-opacity save-profile"
+          >
+            {buttonText}
           </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 }
 

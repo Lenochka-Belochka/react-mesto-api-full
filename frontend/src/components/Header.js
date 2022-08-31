@@ -1,76 +1,31 @@
-import React from "react";
-import logo from "../images/logo.svg";
-import { NavLink, useLocation } from "react-router-dom";
+import logo from "../images/header-logo.svg";
+import { Route, Link } from "react-router-dom";
 
-function Header(props) {
-  const location = useLocation();
-  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
+function Header({ signOut, userEmail }) {
 
-  function handleToggleMenu() {
-    setMenuIsOpen(!menuIsOpen);
-  }
-
-  function handleSignOut() {
-    setMenuIsOpen(false);
-    props.onSignOut();
-  }
   return (
-    <header
-      className={props.loggedIn ? "header header__row-reverse" : "header"}
-    >
-      {props.loggedIn && (
-        <div
-          className={
-            menuIsOpen
-              ? "header__container header__container_opened"
-              : "header__container"
-          }
-        >
-          <address className="header__address">
-            {props.email && props.email}
-          </address>
-          <button
-            className="header__button"
-            type="button"
-            onClick={handleSignOut}
-          >
-            Выйти
-          </button>
-        </div>
-      )}
-      <div className="header__container-main">
-        <img
-          className={menuIsOpen ? "header__logo_opened" : "header__logo"}
-          src={logo}
-          alt="логотип сайта"
-        />
-        {props.loggedIn && (
-          <button
-            className={
-              menuIsOpen
-                ? "header__menu-button header__menu-button_opened"
-                : "header__menu-button"
-            }
-            type="button"
-            aria-label="кнопка меню"
-            onClick={handleToggleMenu}
-          />
-        )}
-        {!props.loggedIn && (
-          <nav>
-            {location.pathname === "/signin" && (
-              <NavLink className="header__navlink" to="/signup">
-                Регистрация
-              </NavLink>
-            )}
-            {location.pathname === "/signup" && (
-              <NavLink className="header__navlink" to="/signin">
-                Войти
-              </NavLink>
-            )}
-          </nav>
-        )}
-      </div>
+    <header className="header">
+      <img src={logo} className="header__logo" alt="Логотип 'Mesto Russia'" />
+      <Route path="/signin">
+        <Link className="header__link link-opacity" to="/signup">
+          Регистрация
+        </Link>
+      </Route>
+
+      <Route path="/signup">
+        <Link className="header__link link-opacity" to="/signin">
+          Войти
+        </Link>
+      </Route>
+
+      <Route exact path="/">
+        <h2 className="header__link" style={{ marginLeft: "auto", marginRight: "24px" }}>
+          {userEmail}
+        </h2>
+        <Link className="header__link link-opacity" onClick={signOut} style={{ color: "#A9A9A9" }} to="/signin">
+          Выйти
+        </Link>
+      </Route>
     </header>
   );
 }

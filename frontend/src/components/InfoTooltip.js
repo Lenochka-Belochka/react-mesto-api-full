@@ -1,27 +1,38 @@
-import successImg from "../images/success.svg";
-import failImg from "../images/fail.svg";
+import React from "react";
+import success from "../images/success.svg";
+import fail from "../images/fail.svg";
 
-function InfoTooltip(props) {
+function InfoTooltip({ isInfoTooltipOpen, isSuccess, onClose }) {
+  const textSuccess = "Вы успешно зарегистрировались!";
+  const textFail = "Что-то пошло не так! Попробуйте ещё раз.";
   return (
-    <div className={props.isOpen ? `modal modal_active` : `modal`}>
-      <div className="modal__inner modal__infotool">
+    <section className={`popup ${isInfoTooltipOpen ? "popup_opened" : ""}`}>
+      <div className="popup__container">
         <button
-          className="modal__close"
           type="button"
-          onClick={props.onClose}
+          aria-label="Закрыть попап редактирования профиля"
+          className="popup__close-button link-opacity"
+          onClick={onClose}
         ></button>
         <img
-          src={props.isRegSuccess ? successImg : failImg}
-          className="modal__infotool-img"
-          alt="успешная регистрация"
+          src={isSuccess ? success : fail}
+          style={{ paddingTop: 60 }}
+          alt={isSuccess ? textSuccess : textFail}
         />
-        <h2 className="modal__title">
-          {props.isRegSuccess
-            ? "Вы успешно зарегистрировались!"
-            : "Что-то пошло не так! Попробуйте ещё раз."}
+        <h2
+          className="popup__title"
+          style={{
+            textAlign: "center",
+            padding: 0,
+            marginLeft: 0,
+            marginBottom: 60,
+            marginTop: 32,
+          }}
+        >
+          {isSuccess ? textSuccess : textFail}
         </h2>
       </div>
-    </div>
+    </section>
   );
 }
 
