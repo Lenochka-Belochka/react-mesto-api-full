@@ -72,7 +72,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      auth
+      api
         .getUserProfile()
         .then((userData) => {
           console.log(userData);
@@ -201,7 +201,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    auth
+    api
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -218,7 +218,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    auth
+    api
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
