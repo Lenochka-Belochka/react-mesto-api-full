@@ -37,7 +37,7 @@ export class Api {
   
   // Метод для удаления карточки
   deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${data}`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": this._headers.contentType,
