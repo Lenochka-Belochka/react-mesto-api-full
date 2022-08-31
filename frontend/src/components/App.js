@@ -157,7 +157,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      api
+      auth
         .getInitialCards()
         .then((cards) => {
           console.log(cards);
