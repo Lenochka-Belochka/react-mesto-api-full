@@ -1,40 +1,18 @@
-function PopupWithForm({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  name,
-  buttonText,
-  children,
-}) {
-  return (
-    <section className={`popup ${name} ${isOpen ? "popup_opened" : ""}`}>
-      <div className="popup__container">
-        <button
-          type="button"
-          aria-label="Закрыть попап редактирования профиля"
-          className="popup__close-button link-opacity"
-          onClick={onClose}
-        ></button>
-        <h2 className="popup__title">{title}</h2>
+import React from "react";
 
-        <form
-          name={`${name}-form`}
-          action="#"
-          className="popup__form"
-          onSubmit={onSubmit}
-        >
-          {children}
-          <button
-            type="submit"
-            className="popup__save-button link-opacity save-profile"
-          >
-            {buttonText}
-          </button>
-        </form>
-      </div>
-    </section>
-  );
+function PopupWithForm(props) {
+    return (
+        <div className={`popup popup_${props.name} ${props.isOpen && "popup_opened"}`}>
+            <div className="popup__container">
+                <h2 className="popup__heading">{props.title}</h2>
+                <form name={props.name} className="popup__form" onSubmit={props.onSubmit}>
+                    {props.children}
+                    <button type="submit" className="popup__save">{props.button}</button>
+                </form>
+                <button className="popup__close" aria-label="закрыть" type="button" onClick={props.onClose}></button>
+            </div>
+        </div>
+    )
 }
 
 export default PopupWithForm;

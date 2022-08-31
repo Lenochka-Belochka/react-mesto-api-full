@@ -1,33 +1,30 @@
-import logo from "../images/header-logo.svg";
-import { Route, Link } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from "../images/logo.svg";
 
-function Header({ signOut, userEmail }) {
+function Header({ userEmail, onSignOut }) {
+  const location = useLocation();
+  let {email} = userEmail || {};
 
   return (
     <header className="header">
-      <img src={logo} className="header__logo" alt="Логотип 'Mesto Russia'" />
-      <Route path="/signin">
-        <Link className="header__link link-opacity" to="/signup">
-          Регистрация
-        </Link>
-      </Route>
+      <img className="header__logo" src={logo} alt="логотип проекта Место" />
 
-      <Route path="/signup">
-        <Link className="header__link link-opacity" to="/signin">
-          Войти
-        </Link>
-      </Route>
+      <div className={`header__info ${location.pathname === '/' && "header__info_inactive"}`}>
+        {location.pathname === '/' ?
+          <>
+            <div className="header__email">{email}</div>
+            <Link onClick={onSignOut} className="header__signout" to={'/signin'}>Выйти</Link>
+          </>
+          : location.pathname === '/signin' ?
+            <Link className="header__signout" to={'/signup'}>Регистрация</Link>
+            : location.pathname === '/signup' ?
+              <Link className="header__signout" to={'/signin'}>Войти</Link> : ""}
+      </div>
 
-      <Route exact path="/">
-        <h2 className="header__link" style={{ marginLeft: "auto", marginRight: "24px" }}>
-          {userEmail}
-        </h2>
-        <Link className="header__link link-opacity" onClick={signOut} style={{ color: "#A9A9A9" }} to="/signin">
-          Выйти
-        </Link>
-      </Route>
     </header>
-  );
+
+  )
 }
 
 export default Header;

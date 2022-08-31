@@ -1,79 +1,42 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import Auth from './Auth.js';
+import { Link } from 'react-router-dom';
 
-function Register({ registration }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Register({ onRegister }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [isVisiblePassword, setisVisiblePassword] = useState("password");
-
-  function handleVisibleChange() {
-    setisVisiblePassword(isVisiblePassword === "password" ? "text" : "password");
+  function handleEmail(evt) {
+    setEmail(evt.target.value)
   }
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+  function handlePassword(evt) {
+    setPassword(evt.target.value)
   }
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    registration(email, password);
-    setEmail("");
-    setPassword("");
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onRegister(password, email)
   }
 
   return (
-    <section className="authorization">
-      <h2 className="authorization__title">Регистрация</h2>
+    <div className="register">
+      <Auth title={'Регистрация'} name={'register'} onSubmit={handleSubmit}>
+        <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="new_email"
+          name="email" value={email || ''} onChange={handleEmail}
+          minLength="2" maxLength="40" required />
+        <span className="popup__error email-error"></span>
 
-      <form name="" action="#" className="authorization__form" onSubmit={handleSubmit} noValidate>
-        <input
-          id="email"
-          className="authorization__input"
-          name="email"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
-          autoComplete="off"
-          minLength="2"
-          maxLength="40"
-          required
-        />
+        <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="new_password"
+          name="password" value={password || ''} onChange={handlePassword}
+          minLength="6" maxLength="200" required />
+        <span className="popup__error password-error"></span>
 
-        <input
-          id="password"
-          name="password"
-          type={isVisiblePassword}
-          placeholder="Пароль"
-          value={password}
-          onChange={handlePasswordChange}
-          className="authorization__input"
-          autoComplete="off"
-          minLength="2"
-          maxLength="200"
-          required
-        />
-        <h2
-          className="authorization__registered link-opacity"
-          style={{ textAlign: "center" }}
-          onClick={handleVisibleChange}
-        >
-          Показать пароль
-        </h2>
-
-        <button type="submit" className="authorization__button link-opacity save-profile">
-          Зарегистрироваться
-        </button>
-      </form>
-      <Link to="/signin" className="authorization__registered" href="#">
-        Уже зарегистрированы? Войти
-      </Link>
-    </section>
-  );
+        <button className={"popup__save popup__save_auth"} type="submit" >Зарегистрироваться</button>
+        <p className={"popup__text"}>Уже зарегистрированы? <Link className={"popup__link"} to={'/signin'}>Войти</Link></p>
+      </Auth>
+    </div>
+  )
 }
-export default Register;
+
+export default Register; 

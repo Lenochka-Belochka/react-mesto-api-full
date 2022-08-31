@@ -1,87 +1,38 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Auth from './Auth.js';
 
-function Login({ authorization }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isVisiblePassword, setisVisiblePassword] = useState("password");
+function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  function handleVisibleChange() {
-    setisVisiblePassword(
-      isVisiblePassword === "password" ? "text" : "password"
-    );
+  function handleEmail(evt) {
+    setEmail(evt.target.value)
   }
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+  function handlePassword(evt) {
+    setPassword(evt.target.value)
   }
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    authorization(email, password);
-
-    setEmail("");
-    setPassword("");
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onLogin(password, email)
   }
 
   return (
-    <>
-      <section className="authorization">
-        <h2 className="authorization__title">Вход</h2>
+    <Auth title={'Вход'} name={'login'} onSubmit={handleSubmit}>
+      <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="email"
+        name="email" value={email || ''} onChange={handleEmail}
+        minLength="2" maxLength="40" required />
+      <span className="popup__error email-error"></span>
 
-      <form
-        name=""
-        action="#"
-        className="authorization__form"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-        <input
-          id="email"
-          className="authorization__input"
-          name="email"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
-          autoComplete="off"
-          minLength="2"
-          maxLength="40"
-          required
-        />
+      <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="password"
+        name="password" value={password || ''} onChange={handlePassword}
+        minLength="6" maxLength="200" required />
+      <span className="popup__error password-error"></span>
 
-        <input
-          id="password"
-          name="password"
-          type={isVisiblePassword}
-          placeholder="Пароль"
-          value={password}
-          onChange={handlePasswordChange}
-          className="authorization__input"
-          autoComplete="off"
-          minLength="2"
-          maxLength="200"
-          required
-        />
-        <h2
-          className="authorization__registered link-opacity"
-          style={{ textAlign: "center" }}
-          onClick={handleVisibleChange}
-        >
-          Показать пароль
-        </h2>
-        <button
-          type="submit"
-          className="authorization__button link-opacity save-profile"
-        >
-          Войти
-        </button>
-      </form>
-    </section>
-    </>
-  );
+      <button className={"popup__save popup__save_auth"} type="submit">Войти</button>
+    </Auth>
+  )
 }
-export default Login;
+
+export default Login; 

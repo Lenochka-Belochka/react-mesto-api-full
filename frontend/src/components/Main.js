@@ -1,66 +1,39 @@
-import React from "react";
-import Card from "./Card";
-import { CurrentUserContext } from "../context/currentUserContext";
+import React from 'react';
+import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({
-  onEditAvatar,
-  onEditProfile,
-  onAddPlace,
-  onCardClick,
-  cards,
-  onCardLike,
-  onCardDelete,
-}) {
-  const currentUser = React.useContext(CurrentUserContext);
-  return (
-    <main className="content">
-      <section className="profile">
-        <div className="profile__avatar profile__avatar-opacity">
-          <img
-            src={currentUser.avatar}
-            className="profile__icon profile__avatar-opacity"
-            alt="Аватарка"
-          />
-          <button
-            type="button"
-            className="profile__edit-avatar-button profile__pencil profile__avatar-opacity"
-            alt="Аватарка"
-            onClick={onEditAvatar}
-          ></button>
-        </div>
-        <div className="profile__info">
-          <h1 className="profile__title">{currentUser.name}</h1>
-          <button
-            type="button"
-            className="profile__edit-button link-opacity"
-            onClick={onEditProfile}
-          ></button>
-          <p className="profile__subtitle">{currentUser.about}</p>
-        </div>
-        <button
-          type="button"
-          className="profile__add-button link-opacity"
-          onClick={onAddPlace}
-        ></button>
-      </section>
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete, cards }) {
 
-      <section className="elements">
-        <ul className="elements__cards">
-          {cards.map((card) => {
-            return (
-              <Card
-                key={card._id}
-                card={card}
-                onCardClick={onCardClick}
-                onCardLike={onCardLike}
-                onCardDelete={onCardDelete}
-              />
-            );
-          })}
-        </ul>
-      </section>
-    </main>
-  );
+    const currentUser = React.useContext(CurrentUserContext);
+
+    return (
+        <main className="content">
+            <section className="profile">
+                <div style={{ backgroundImage: `url(${currentUser.avatar})` }} alt="фотография профиля" className="profile__avatar"></ div>
+                <button onClick={onEditAvatar} type="button" className="profile__edit"></button>
+                <div className="profile__info">
+                    <div className="profile__container">
+                        <h1 className="profile__title">{currentUser.name}</h1>
+                        <button onClick={onEditProfile} className="profile__edit-button" type="button" aria-label="редактировать"></button>
+                    </div>
+                    <p className="profile__subtitle">{currentUser.about}</p>
+                </div>
+                <button onClick={onAddPlace} className="profile__add-button" type="button" aria-label="добавить"></button>
+            </section>
+
+            <section className="cards">
+                <ul className="cards__grid">
+                    {cards.map((item) => (
+                        <Card
+                            card={item}
+                            key={item._id}
+                            onCardClick={onCardClick}
+                            onCardLike={onCardLike}
+                            onCardDelete={onCardDelete} />))}
+                </ul>
+            </section>
+        </main>
+    )
 }
 
 export default Main;

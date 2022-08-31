@@ -1,44 +1,48 @@
 import React from "react";
-import { CurrentUserContext } from "../context/currentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
-  const like = card.likes;
-  const currentUser = React.useContext(CurrentUserContext);
-  const isOwn = card.owner === currentUser._id;
-  const cardDeleteButtonClassName = isOwn ? (
-    <button type="button" className="elements__trash-button link-opacity" onClick={handleDeleteClick}></button>
-  ) : (
-    ""
-  );
-  const isLiked = card.likes.some(item => item === currentUser._id);
-  const cardLikeButtonClassName = `${isLiked ? "elements__heart_active" : "elements__heart"} link-opacity`;
+    const currentUser = React.useContext(CurrentUserContext);
 
-  function handleDeleteClick() {
-    onCardDelete(card);
-  }
+    // Определяем, являемся ли мы владельцем текущей карточки
+    const isOwn = card.owner._id === currentUser._id || card.owner === currentUser._id;
 
-  function handleLikeClick() {
-    onCardLike(card);
-  }
+    // Создаём переменную, которую после зададим в `className` для кнопки удаления
+    const cardDeleteButtonClassName = (
+        `card__delete ${isOwn ? 'card__delete' : 'card__delete_hidden'}`
+    );
 
-  function handleClick() {
-    onCardClick(card);
-  }
-  return (
-    <li className="card-template">
-      <div className="elements__card">
-        {cardDeleteButtonClassName}
-        <img src={card.link} onClick={handleClick} className="elements__photo" alt={card.name} />
-        <div className="elements__footer">
-          <h2 className="elements__title">{card.name}</h2>
-          <div>
-            <button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
-            <h2 className="elements__amount">{like.length}</h2>
-          </div>
-        </div>
-      </div>
-    </li>
-  );
+    // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+    //const isLiked = card.likes.some(i => i._id === currentUser._id || i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id || i._id === currentUser._id);
+    // Создаём переменную, которую после зададим в `className` для кнопки лайка
+    const cardLikeButtonClassName = `card__like ${isLiked ? 'card__like-active' : ''} `;
+
+    function handleClick() {
+        onCardClick(card);
+    }
+
+    function handleLikeClick() {
+        onCardLike(card);
+    }
+
+    function handleDeleteClick() {
+        onCardDelete(card);
+    }
+
+    return (
+        <li className="card">
+            <button onClick={handleDeleteClick} className={cardDeleteButtonClassName} type="button" aria-label="удалить"></button>
+            <img className="card__image" src={card.link} alt={card.name} onClick={handleClick} />
+            <div className="card__description">
+                <h2 className="card__title">{card.name}</h2>
+                <div className="card__container">
+                    <button onClick={handleLikeClick} className={cardLikeButtonClassName} type="button" aria-label="нравится"></button>
+                    <div className="card__like-count">{card.likes.length}</div>
+                </div>
+            </div>
+        </li>
+    )
 }
 
 export default Card;
