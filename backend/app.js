@@ -1,62 +1,70 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const { errors } = require('celebrate');
-const bodyParser = require('body-parser');
+const { errors, celebrate, Joi } = require('celebrate');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const app = express();
-const { validateLogin, validateUser } = require('./utils/validation');
-const { login, createUsers } = require('./controllers/users');
+const { userRouter } = require('./routes/users');
+const { cardRouter } = require('./routes/cards');
+const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const users = require('./routes/users');
-const cards = require('./routes/cards');
+const error = require('./middlewares/error');
+const cors = require('./middlewares/cors');
+
+const { regExpUrl } = require('./utils/const');
+
 const NotFoundError = require('./errors/NotFoundError');
 
-const { ERROR_SERVER } = require('./utils/const');
+const app = express();
+
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
-  useNewUrlParser: true,
-});
+app.use(express.json());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors);
 
-app.use(requestLogger); // подключаем логгер запросов
-app.use(cors());
-
-// Краш-тест сервера
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
 
-app.post('/signin', validateLogin, login);
-app.post('/signup', validateUser, createUsers);
+// Логгер запросов нужно подключить до всех обработчиков роутов:
+app.use(requestLogger); // подключаем логгер запросов
 
-app.use(auth);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().pattern(regExpUrl),
+  }),
+}), createUser);
 
-app.use('/', users);
-app.use('/', cards);
+app.use(auth); // авторизация
 
-app.use((req, res, next) => {
-  next(new NotFoundError('К сожалению, запращиваемый ресурс не найден'));
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
+
+app.use('/', (_, res, next) => {
+  next(new NotFoundError('Такой URL не найден'));
 });
 
+// errorLogger нужно подключить после обработчиков роутов и до обработчиков ошибок:
 app.use(errorLogger); // подключаем логгер ошибок
 
 app.use(errors()); // обработчик ошибок celebrate
 
-// централизованный обработчик ошибок
-app.use((err, req, res, next) => {
-  const { statusCode = ERROR_SERVER, message } = err;
-  const errorMessage = (statusCode === ERROR_SERVER) ? 'Ошибка на сервере' : message;
-  res.status(statusCode).send({ message: errorMessage });
-  next();
-});
+app.use(error); // мой обработчий ошибок
 
 app.listen(PORT);

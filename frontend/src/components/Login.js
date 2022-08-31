@@ -1,38 +1,35 @@
-import React, { useState } from 'react';
-import Auth from './Auth.js';
+// import components
+import { useState } from 'react'
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: ''
+  })
 
-  function handleEmail(evt) {
-    setEmail(evt.target.value)
+  function handleChange(e) {
+    const {name, value} = e.target
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
-  function handlePassword(evt) {
-    setPassword(evt.target.value)
-  }
-
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    onLogin(password, email)
+  function handleSubmit(e) {
+    e.preventDefault()
+    onLogin(formValues.password, formValues.email)
   }
 
   return (
-    <Auth title={'Вход'} name={'login'} onSubmit={handleSubmit}>
-      <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="email"
-        name="email" value={email || ''} onChange={handleEmail}
-        minLength="2" maxLength="40" required />
-      <span className="popup__error email-error"></span>
-
-      <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="password"
-        name="password" value={password || ''} onChange={handlePassword}
-        minLength="6" maxLength="200" required />
-      <span className="popup__error password-error"></span>
-
-      <button className={"popup__save popup__save_auth"} type="submit">Войти</button>
-    </Auth>
+    <div className='auth root__auth'>
+      <h3 className='auth__title'>Вход</h3>
+      <form onSubmit={handleSubmit} className='auth__form'>
+        <input onChange={handleChange} className='auth__input' type='email' placeholder='Email' name='email' value={formValues.email || ''} required />
+        <input onChange={handleChange} className='auth__input' type='password' placeholder='Пароль' name='password' value={formValues.password || ''} required />
+        <button type='submit' className='auth__button'>Войти</button>
+      </form>
+    </div>
   )
 }
 
-export default Login; 
+export default Login

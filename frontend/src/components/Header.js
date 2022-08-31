@@ -1,30 +1,34 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import logo from "../images/logo.svg";
+import { Switch, Route, Link } from 'react-router-dom'
 
-function Header({ userEmail, onSignOut }) {
-  const location = useLocation();
-  let {email} = userEmail || {};
+//import images 
+import logoImg from '../images/logo.svg'
 
+function Header({ onSingOut, userEmail }) {
   return (
-    <header className="header">
-      <img className="header__logo" src={logo} alt="логотип проекта Место" />
-
-      <div className={`header__info ${location.pathname === '/' && "header__info_inactive"}`}>
-        {location.pathname === '/' ?
-          <>
-            <div className="header__email">{email}</div>
-            <Link onClick={onSignOut} className="header__signout" to={'/signin'}>Выйти</Link>
-          </>
-          : location.pathname === '/signin' ?
-            <Link className="header__signout" to={'/signup'}>Регистрация</Link>
-            : location.pathname === '/signup' ?
-              <Link className="header__signout" to={'/signin'}>Войти</Link> : ""}
-      </div>
-
+    <header className="header root__header">
+      <img src={logoImg} alt="Логотип" className="logo root__logo" />
+      <Switch>
+        <Route path="/sign-in">
+          <Link className="auth__link" to="/sign-up">
+            Регистрация
+          </Link>
+        </Route>
+        <Route path="/sign-up">
+          <Link className="auth__link" to="/sign-in">
+            Войти
+          </Link>
+        </Route>
+        <Route path="/">
+          <div>
+            <span className='auth__email'>{userEmail || ''}</span>
+            <Link onClick={onSingOut} className="auth__link auth__link_singout" to="/sign-in">
+              Выйти
+            </Link>
+          </div>
+        </Route>
+      </Switch>
     </header>
-
-  )
+  );
 }
 
-export default Header;
+export default Header
