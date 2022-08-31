@@ -92,7 +92,6 @@ export class Api {
       }),
     }).then((res) => this._checkResponse(res));
   }
-}
 
 changeLikeCardStatus(id, isLiked) {
   return fetch(`${this._baseUrl}/cards/${id}/likes`, {
@@ -102,6 +101,7 @@ changeLikeCardStatus(id, isLiked) {
           'Authorization': `Bearer ${localStorage.getItem('jwt')}`
         },
   }).then((res) => this._checkResponse(res));
+}
 }
 
   /*
@@ -129,12 +129,7 @@ changeLikeCardStatus(id, isLiked) {
   
 
 
-const api = new Api({
+  export const api = new Api({
   baseUrl: "https://mesto.back.project.nomoredomains.sbs",
-  headers: {
-    contentType: "application/json",
-  },
 });
-
-export default api;
 
