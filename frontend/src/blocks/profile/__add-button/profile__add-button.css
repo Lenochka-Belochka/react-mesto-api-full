@@ -1,26 +1,21 @@
-.profile__add-button{
-    padding: 0;
+.profile__add-button {
     width: 150px;
     height: 50px;
-    background-color: #000000;
-    background-image: url(../../../images/crestic.svg);
-    grid-column: 3;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: 2px #FFFFFF solid;
-    align-self: center;
-    justify-self: end;
-}
-
-.profile__add-button:hover{
-    opacity: 0.6;
+    background: url(../../../images/plus.svg) no-repeat center;
+    border: 2px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 2px;
     cursor: pointer;
 }
 
-@media screen and (max-width: 864px){
-    .profile__add-button{
-        grid-column: 1;
+.profile__add-button:hover {
+    opacity: 0.6;
+}
+
+@media screen and (max-width: 680px) {
+    .profile__add-button {
         width: 100%;
-        margin: 36px 0 0;
+        margin-top: 36px;
+        background-size: 16px;
     }
 }

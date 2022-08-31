@@ -1,38 +1,76 @@
 import React from "react";
 import logo from "../images/logo.svg";
-import { useLocation, Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
-function Header({ email, onSignOut }) {
-
+function Header(props) {
   const location = useLocation();
+  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
 
+  function handleToggleMenu() {
+    setMenuIsOpen(!menuIsOpen);
+  }
+
+  function handleSignOut() {
+    setMenuIsOpen(false);
+    props.onSignOut();
+  }
   return (
-    <header className="header" href='/'>
-      <a className="header__link">
-        <img className="header__logo" src={logo} alt="Логотип" />
-      </a>
-      {location.pathname === "/" && (
-        <div className="header__contener">
-          <p className="header__user-email">{email}</p>
-          <Link className="header__button" to="/signin" onClick={onSignOut}>
+    <header
+      className={props.loggedIn ? "header header__row-reverse" : "header"}
+    >
+      {props.loggedIn && (
+        <div
+          className={
+            menuIsOpen
+              ? "header__container header__container_opened"
+              : "header__container"
+          }
+        >
+          <address className="header__address">
+            {props.email && props.email}
+          </address>
+          <button
+            className="header__button"
+            type="button"
+            onClick={handleSignOut}
+          >
             Выйти
-          </Link>
+          </button>
         </div>
       )}
-      {location.pathname === "/signup" && (
-        <div className="header__contener">
-          <Link className="header__button" to="/signin">
-            Войти
-          </Link>
-        </div>
-      )}
-      {location.pathname === "/signin" && (
-        <div className="header__contener">
-          <Link className="header__button" to="/signup">
-            Регистрация
-          </Link>
-        </div>
-      )}
+      <div className="header__container-main">
+        <img
+          className={menuIsOpen ? "header__logo_opened" : "header__logo"}
+          src={logo}
+          alt="логотип сайта"
+        />
+        {props.loggedIn && (
+          <button
+            className={
+              menuIsOpen
+                ? "header__menu-button header__menu-button_opened"
+                : "header__menu-button"
+            }
+            type="button"
+            aria-label="кнопка меню"
+            onClick={handleToggleMenu}
+          />
+        )}
+        {!props.loggedIn && (
+          <nav>
+            {location.pathname === "/signin" && (
+              <NavLink className="header__navlink" to="/signup">
+                Регистрация
+              </NavLink>
+            )}
+            {location.pathname === "/signup" && (
+              <NavLink className="header__navlink" to="/signin">
+                Войти
+              </NavLink>
+            )}
+          </nav>
+        )}
+      </div>
     </header>
   );
 }

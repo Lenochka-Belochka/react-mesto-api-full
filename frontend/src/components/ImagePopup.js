@@ -1,24 +1,39 @@
 import React from "react";
 
-function ImagePopup({ card, onClose }) {
+function ImagePopup(props) {
+  React.useEffect(() => {
+    function handleEscClose(e) {
+      if (e.key === "Escape") {
+        props.onClose();
+      }
+    }
+    if (props.isOpen) {
+      document.addEventListener("keydown", handleEscClose);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [props.isOpen, props.onClose]);
   return (
-    <div className={`popup ${card.link && "popup_opened"}`} id="popup__img">
-      <form className="popup__container-img" name="img" id="container-three">
-        <img
-          className="popup__img"
-          src={`${card.link}`}
-          alt={card.name}
-          id="img"
-        />
+    <div
+      className={`modal modal-img ${
+        props.card && props.isOpen ? "modal_active" : ""
+      }`}
+    >
+      <div className="modal-img__container">
         <button
-          className="popup__close-btn"
-          onClick={onClose}
-          aria-label="Закрыть"
+          className="modal__close"
           type="button"
-          id="close-img"
+          aria-label="закрытие попап"
+          onClick={props.onClose}
         ></button>
-        <h2 className="popup__name-img">{card.name}</h2>
-      </form>
+        <img
+          className="modal__img"
+          src={props.card.link}
+          alt={props.card.name}
+        />
+        <p className="modal__caption">{props.card.name}</p>
+      </div>
     </div>
   );
 }

@@ -1,34 +1,38 @@
 import React from "react";
 
-function PopupWithForm({
-  isOpen,
-  id,
-  name,
-  title,
-  children,
-  buttonText,
-  onClose,
-  onSubmit,
-}) {
+function PopupWithForm(props) {
+  React.useEffect(() => {
+    function handleEscClose(e) {
+      if (e.key === "Escape") {
+        props.onClose();
+      }
+    }
+    if (props.isOpen) {
+      document.addEventListener("keydown", handleEscClose);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [props.isOpen, props.onClose]);
   return (
-    <div className={`popup ${isOpen && "popup_opened"}`} id={id}>
-      <form
-        name={name}
-        className="popup__container"
-        onSubmit={onSubmit}
-      >
-        <h2 className="popup__title">{title}</h2>
-        {children}
-        <button className="popup__save-btn" type="submit">
-          {buttonText}
-        </button>
+    <div
+      className={`modal modal-${props.name} ${props.isOpen && "modal_active"}`}
+    >
+      <div className="modal__inner">
+        <h2 className="modal__title">{props.title}</h2>
         <button
-          onClick={onClose}
-          className="popup__close-btn"
+          className="modal__close"
           type="button"
-          aria-label="Закрыть"
+          aria-label="закрытие попап"
+          onClick={props.onClose}
         ></button>
-      </form>
+        <form className="form" name={props.name} onSubmit={props.onSubmit}>
+          {props.children}
+          <button className="modal__submit" type="submit">
+            {props.buttonText}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

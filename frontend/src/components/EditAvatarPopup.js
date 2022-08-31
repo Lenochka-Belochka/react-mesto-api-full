@@ -1,38 +1,36 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isDataLoad }) {
-  const avatarRef = React.useRef(); //* записываем объект, возвращаемый хуком, в переменную
+function EditAvatarPopup(props) {
+  const avatarRef = React.useRef("");
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    onUpdateAvatar({ url: avatarRef.current.value });
+    props.onUpdateAvatar({
+      avatar: avatarRef.current.value,
+    });
   }
-
-  React.useEffect(() => {
-    avatarRef.current.value = "";
-  }, [isOpen]);
 
   return (
     <PopupWithForm
       name="avatar"
       title="Обновить аватар"
-      isOpen={isOpen}
-      onClose={onClose}
+      buttonText="Сохранить"
+      isOpen={props.isOpen}
+      onClose={props.onClose}
       onSubmit={handleSubmit}
-      buttonText={isDataLoad ? "Обновляем..." : "Обновить"}
     >
       <input
-        ref={avatarRef}
-        className="popup__input-line"
+        id="avaInput"
         type="url"
-        name="url"
-        id="avatar"
-        placeholder="Ссылка на фото"
+        className="modal__input"
+        name="avatar"
         required
+        autoComplete="off"
+        ref={avatarRef}
+        placeholder="Ссылка на аватар"
       />
-      <span className="popup__error" id="avatar-error"></span>
+      <span className="modal__error" id="avaInputError"></span>
     </PopupWithForm>
   );
 }

@@ -1,32 +1,28 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
-const { validateURL, putError } = require('./utils/error-codes');
+const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { userRouter } = require('./routes/users');
-const { cardRouter } = require('./routes/cards');
-const { login, logout, createUsers } = require('./controllers/users');
-const NotFoundError = require('./utils/errors/not-found-err');
-const Authorized = require('./middlewares/auth');
+const { userValidation, loginValidation } = require('./middlewares/validation');
+const errorHandler = require('./middlewares/errorHandler');
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
+
+app.use(cookieParser());
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-app.use(cors());
-
-app.use(express.json());
-
-app.use(cookieParser());
-app.use(requestLogger);
+app.use(cors({
+  origin: 'https://mesto.first.project.nomoredomains.sbs',
+  credentials: true,
+}));
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -34,42 +30,14 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
-  login,
-);
-
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-      avatar: Joi.string().custom(validateURL),
-    }),
-  }),
-  createUsers,
-);
-
-app.use('/', Authorized, userRouter);
-app.use('/', Authorized, cardRouter);
-app.use('*', Authorized, () => {
-  throw new NotFoundError('Cтраница не найдена');
-});
+app.use(express.json());
+app.use(requestLogger);
+app.post('/signup', userValidation, createUser);
+app.post('/signin', loginValidation, login);
+app.use(auth);
+app.use(require('./routes/errorPath'));
 
 app.use(errorLogger);
 app.use(errors());
-app.use(putError);
-app.post('/logout', logout);
-
-app.listen(PORT, () => {
-  console.log(`App started on ${PORT} port`);
-});
+app.use(errorHandler);
+app.listen(PORT);

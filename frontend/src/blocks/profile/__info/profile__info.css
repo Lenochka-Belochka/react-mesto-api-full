@@ -1,12 +1,10 @@
-.profile__info{
-    grid-column: 2;
-    display: grid;
-    grid-gap: 0 18px;
- }
+.profile__info {
+    display: flex;
+    flex-basis: 63%;
+}
 
- @media screen and (max-width: 864px){
-    .profile__info{
-        grid-column: 1;
-        margin: 26px 0 0;
+@media screen and (max-width: 890px) {
+    .profile__info {
+        flex-basis: 55%;
     }
 }
