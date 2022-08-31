@@ -1,7 +1,6 @@
 export class Api {
-  constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
+  constructor({ baseUrl }) {
+    this._baseUrl = baseUrl;
   }
 
   //Ответ от сервера
@@ -19,8 +18,8 @@ export class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
-        authorization: `Bearer ${localStorage.getItem("jwt")}`,
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
     }).then((res) => this._checkResponse(res));
   }
@@ -30,8 +29,8 @@ export class Api {
     return fetch(`${this._baseUrl}/cards`, {
         method: "GET",
         headers: {
-          authorization: `Bearer ${localStorage.getItem("jwt")}`,
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`
         },
     }).then((res) => this._checkResponse(res));
   }
