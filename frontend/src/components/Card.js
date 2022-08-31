@@ -12,7 +12,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     isOwn ? "" : "element__button_delete-hidden"
   }`;
 
-  /*
+  
   // лайк, поставленный текущим пользователем
   const isLiked = card.like.some((item) => {
     return item === currentUser._id;
@@ -22,7 +22,6 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const cardLikeButtonClassName = `element__button ${
     isLiked ? "element__button_active" : ""
   }`;
-*/
 
   function handleClick() {
     onCardClick(card);
@@ -61,7 +60,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
             aria-label="Like button"
             onClick={handleLikeClick}
           ></button>
-          <p className="element__likes-number"></p>
+          <p className="element__likes-number">{cardLikeButtonClassName}</p>
         </div>
       </div>
     </li>
