@@ -1,39 +1,29 @@
-import React from "react";
-import PopupWithoutForm from "./PopupWithoutForm";
+import React, { useEffect } from "react";
 
-function InfoTooltip(props) {
+function InfoTooltip({ onClose, status: { isOpen, successful } }) {
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscapeClose = (evt) => {
+      if (evt.key === 'Escape') {
+        onClose()
+      };
+    };
+    document.addEventListener('keyup', handleEscapeClose);
+    return () => {
+      document.removeEventListener('keyup', handleEscapeClose);
+    };
+  }, [isOpen, onClose])
+
   return (
-    <PopupWithoutForm isOpen={props.isOpen} onClose={props.onClose}>
-      {props.successReg ? (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.success_pic}
-            alt="Pic success"
-          />
-
-          <p className="popup__explanation">
-            Вы успешно
-            <br />
-            зарегистрировались!
-          </p>
-        </div>
-      ) : (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.unsuccess_pic}
-            alt="Pic unsuccess"
-          />
-
-          <p className="popup__explanation">
-            Что-то пошло не так!
-            <br />
-            Попробуйте еще раз.
-          </p>
-        </div>
-      )}
-    </PopupWithoutForm>
+    <div className={`popup ${isOpen && 'popup_opened'}`}>
+      <form className="popup__container">
+        <div className={`popup__status ${successful ? 'popup__status_ok' : 'popup__status_stop'}`}></div>
+        <h2 className="popup__title-status">{successful ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте еще раз.'}</h2>
+        <button type="button" onClick={onClose} className="popup__close-btn"></button>
+        <div onClick={onClose} className="popup__overlay"></div>
+      </form>
+    </div>
   );
 }
 

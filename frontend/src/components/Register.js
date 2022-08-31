@@ -1,50 +1,59 @@
-import React from "react";
-import Sign from "./Sign";
-import { Link, withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: "",
-      email: "",
-    };
+const Register = ({ onRegister }) => {
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  const [profileData, setProfileData] = useState({});
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setProfileData((profileData) => ({ ...profileData, [name]: value }));
   }
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegister(profileData)
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.onRegister(this.state.password, this.state.email);
-  }
-
-  render() {
-    return (
-      <>
-        <Sign
-          name={this.props.name}
-          title={this.props.title}
-          email={this.state.email}
-          password={this.state.password}
-          buttonSubmitText={this.props.buttonSubmitText}
-          onSubmit={this.handleSubmit}
-          onChange={this.handleChange}
-        >
-          <Link to="/signin" className="form__login-link">
-            Уже зарегистрированы? Войти
-          </Link>
-        </Sign>
-      </>
-    );
-  }
+  return (
+    <form className="register" onSubmit={handleSubmit}>
+      <h1 className="register__title">Регистрация</h1>
+      <input
+        autoComplete="on"
+        className="register__input"
+        placeholder="Email"
+        id="email"
+        name="email"
+        type="email"
+        value={profileData.email}
+        onChange={handleChange}
+        minLength="2"
+        maxLength="40"
+        required
+      />
+      <span id="register-email-error" className="error"></span>
+      <input
+        autoComplete="on"
+        className="register__input"
+        placeholder="Пароль"
+        id="password"
+        name="password"
+        type="password"
+        value={profileData.password}
+        onChange={handleChange}
+        minLength="2"
+        maxLength="40"
+        required
+      />
+      <span id="register-password-error" className="error"></span>
+      <button type="submit" className="register__button">
+        Зарегистрироваться
+      </button>
+      <Link to="/signin" className="register__link">
+        Уже зарегистрированы? Войти
+      </Link>
+    </form>
+  );
 }
 
-export default withRouter(Register);
+export default Register;

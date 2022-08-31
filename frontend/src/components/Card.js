@@ -1,28 +1,19 @@
 import React from "react";
-import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
-
-
-/*
-  // лайк, поставленный текущим пользователем
-  const isLiked = card.likes.some((item) => {
-    return item === currentUser._id;
-  });
-  
-
-  // cоздаём переменную для кнопки лайка
-const cardLikeButtonClassName = `element__button ${
-  isLiked ? "element__button_active" : ""
-}`;
-*/
-  // проверка владельца
+  // Определяем, являемся ли мы владельцем текущей карточки
   const isOwn = card.owner === currentUser._id;
-
-  // создаём переменную для кнопки удаления
-  const cardDeleteButtonClassName = `element__button_delete ${
-    isOwn ? "" : "element__button_delete-hidden"
+  // Создаём переменную, которую после зададим в `className` для кнопки удаления
+  const cardDeleteButtonClassName = `cards__remove ${
+    isOwn ? "cards__remove_visible" : "cards__remove_hidden"
+  }`;
+  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  const isLiked = card.likes.some((i) => i === currentUser._id);
+  // Создаём переменную, которую после зададим в `className` для кнопки лайка
+  const cardLikeButtonClassName = `cards__like ${
+    isLiked ? "cards__like_black" : ""
   }`;
 
   function handleClick() {
@@ -38,34 +29,34 @@ const cardLikeButtonClassName = `element__button ${
   }
 
   return (
-    <li className="element">
-      <div className="element__picture">
-        <button
-          className={cardDeleteButtonClassName}
-          type="button"
-          aria-label="Trash button"
-          onClick={handleDeleteClick}
-        ></button>
+    <div className="cards__card">
+      <div className="cards__photo-container">
         <img
+          className="cards__photo"
           src={card.link}
           alt={card.name}
-          className="element__image"
           onClick={handleClick}
         />
       </div>
-      <div className="element__item-description">
-        <h2 className="element__item-title">{card.name}</h2>
-        <div className="element__like-group">
+      <div className="cards__group">
+        <h2 className="cards__text">{card.name}</h2>
+        <div className="cards__like-container">
           <button
-            className= "element__button_active"
+            className={cardLikeButtonClassName}
+            aria-label="Нравится"
             type="button"
-            aria-label="Like button"
             onClick={handleLikeClick}
           ></button>
-          <p className="element__likes-number"></p>
+          <span className="cards__like-count">{card.likes.length}</span>
         </div>
       </div>
-    </li>
+      <button
+        className={cardDeleteButtonClassName}
+        aria-label="Удалить"
+        type="button"
+        onClick={handleDeleteClick}
+      ></button>
+    </div>
   );
 }
 

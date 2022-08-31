@@ -1,64 +1,66 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function AddPlacePopup(props) {
-  const [name, setName] = React.useState("");
-  const [link, setLink] = React.useState("");
+function AddPlacePopup({ isOpen, onClose, onAddCard, isDataLoad }) {
+  const [placeName, setPlaceName] = React.useState("");
+  const [placeLink, setPlaceLink] = React.useState("");
 
-  React.useEffect(() => {
-    setName("");
-    setLink("");
-  }, [props.isOpen]);
-
-  //обработчик input
-  function handleChange(event) {
-    const target = event.target;
-    // обновляем стейты в привязке к имени поля
-    target.name === "name" ? setName(target.value) : setLink(target.value);
+  function handleChangePlaceName(e) {
+    setPlaceName(e.target.value);
   }
 
-  // обработчик Submit
+  function handleChangePlaceLink(e) {
+    setPlaceLink(e.target.value);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
-    props.onAddPlace({
-      name: name,
-      link: link,
+
+    //* Передаём значения управляемых компонентов во внешний обработчик
+    onAddCard({
+      name: placeName,
+      link: placeLink,
     });
   }
 
+  React.useEffect(() => {
+    setPlaceName("");
+    setPlaceLink("");
+  }, [isOpen]);
+
   return (
     <PopupWithForm
-      name="add-place"
+      name="card"
       title="Новое место"
-      buttonSubmitText="Cоздать"
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
+      buttonText={isDataLoad ? "Добавляем..." : "Добавить карточку"}
     >
       <input
-        className="form__input form__input_type_place"
+        className="popup__input-line"
+        value={placeName || ""}
+        onChange={handleChangePlaceName}
         type="text"
-        id="photoName"
-        name="name"
-        value={name}
+        name="title"
+        id="title"
         placeholder="Название"
         required
         minLength="2"
         maxLength="30"
-        onChange={handleChange}
       />
-      <span className="popup__error photoName-error"></span>
+      <span className="popup__error" id="title-error"></span>
       <input
-        className="form__input form__input_type_link"
+        className="popup__input-line"
+        value={placeLink || ""}
+        onChange={handleChangePlaceLink}
         type="url"
-        id="photoLink"
-        value={link}
-        placeholder="Ссылка на картинку"
         name="link"
+        id="link"
+        placeholder="Ссылка на картинку"
         required
-        onChange={handleChange}
       />
-      <span className="popup__error photoLink-error"></span>
+      <span className="popup__error" id="link-error"></span>
     </PopupWithForm>
   );
 }

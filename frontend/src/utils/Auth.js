@@ -1,45 +1,44 @@
-export const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
+export const baseUrl = "https://mesto.back.project.nomoredomains.sbs";
 
-const  checkResponse = (res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка выполнении запроса: ${res.status}`);
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
   }
+  return Promise.reject(`Ошибка:( ${res.status}`);
+}
 
 export const register = (email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        },
-    body: JSON.stringify({ email, password }),
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
   }).then(checkResponse);
 };
-
 
 export const login = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
+  return fetch(`${baseUrl}/signin`, {
     method: "POST",
     headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        },
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ email, password }),
   }).then(checkResponse);
 };
 
-
-export const getContent = () => {
-  return fetch(`${BASE_URL}/users/me`, {
+export const checkToken = (token) => {
+  return fetch(`${baseUrl}/users/me`, {
     method: "GET",
     headers: {
-        authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,
     },
   }).then(checkResponse);
 };
-
-
-
-  

@@ -1,34 +1,64 @@
-import React from "react";
-import Sign from "./Sign";
+import React, { useState } from "react";
 
-function Login(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+function Login({ onLogin }) {
+  const initialData = {
+    email: "",
+    password: "",
+  };
 
-  function handleChange(event) {
-    const target = event.target;
-    target.name === "email"
-      ? setEmail(target.value)
-      : setPassword(target.value);
-  }
+  const [profileData, setProfileData] = useState(initialData);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setEmail("");
-    setPassword("");
-    props.onLogin(password, email);
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((profileData) => ({
+      ...profileData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!profileData.password || !profileData.email) {
+      return;
+    }
+
+    onLogin(profileData);
+  };
 
   return (
-    <Sign
-      name={props.name}
-      title={props.title}
-      email={email}
-      password={password}
-      buttonSubmitText={props.buttonSubmitText}
-      onSubmit={handleSubmit}
-      onChange={handleChange}
-    />
+    <form className="login" onSubmit={handleSubmit}>
+      <h1 className="login__title">Вход</h1>
+      <input
+        autoComplete="on"
+        className="login__input"
+        placeholder="Email"
+        id="email"
+        name="email"
+        type="email"
+        value={profileData.email}
+        onChange={handleChange}
+        minLength="2"
+        maxLength="40"
+        required
+      />
+      <input
+        autoComplete="on"
+        className="login__input"
+        placeholder="Пароль"
+        id="password"
+        name="password"
+        type="password"
+        value={profileData.password}
+        onChange={handleChange}
+        minLength="2"
+        maxLength="40"
+        required
+      />
+      <button className="login__button" type="submit">
+        Войти
+      </button>
+    </form>
   );
 }
 

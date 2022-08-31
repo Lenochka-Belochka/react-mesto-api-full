@@ -1,37 +1,48 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { errors, celebrate, Joi } = require('celebrate');
-const usersRouter = require('./routes/users');
-const cardsRouter = require('./routes/cards');
-const errorRouter = require('./routes/error');
-const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
-const errorHandler = require('./middlewares/errorHandler');
-const { requestLogger, errorLoger } = require('./middlewares/logger');
+const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const cors = require('./middlewares/cors');
+const { validateURL, putError } = require('./utils/error-codes');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { userRouter } = require('./routes/users');
+const { cardRouter } = require('./routes/cards');
+const { login, logout, createUsers } = require('./controllers/users');
+const NotFoundError = require('./utils/errors/not-found-err');
+const Authorized = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
+
 const app = express();
 
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+  useNewUrlParser: true,
+});
+
+app.use(cors);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Слишком много запросов, пожалуйста, повторите попытку позже.',
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 app.use(cookieParser());
-
 app.use(requestLogger);
-
-app.use(cors());
+app.use(limiter);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
-  useNewUrlParser: true,
-});
-
-app.use(express.json());
 
 app.post(
   '/signin',
@@ -48,21 +59,27 @@ app.post(
   '/signup',
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string().regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
+      email: Joi.string().required().email(),
+      password: Joi.string().required(),
+      avatar: Joi.string().custom(validateURL),
     }),
   }),
-  createUser,
+  createUsers,
 );
 
-app.use('/', auth, usersRouter);
-app.use('/', auth, cardsRouter);
-app.all('*', auth, errorRouter);
-app.use(errorLoger);
-app.use(errors());
-app.use(errorHandler);
+app.use('/', Authorized, userRouter);
+app.use('/', Authorized, cardRouter);
+app.use('*', Authorized, () => {
+  throw new NotFoundError('Cтраница не найдена');
+});
 
-app.listen(PORT);
+app.use(errorLogger);
+app.use(errors());
+app.use(putError);
+app.post('/logout', logout);
+
+app.listen(PORT, () => {
+  console.log(`App started on ${PORT} port`);
+});

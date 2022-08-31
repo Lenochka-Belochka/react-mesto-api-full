@@ -1,15 +1,15 @@
-.popup__container {
-  max-width: 75vw;
-  max-height: 75vh;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.popup__container{
+    display: flex;
+    flex-direction: column;
+    max-width: 430px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    width: 100%;
+    position: relative;
 }
 
-@media screen and (max-width: 520px) {
-  .popup__container {
-    width: 282px;
-    margin: 0 auto;
-  }
+@media screen and (max-width: 864px){
+    .popup__container{
+        max-width: 282px;
+    }
 }
