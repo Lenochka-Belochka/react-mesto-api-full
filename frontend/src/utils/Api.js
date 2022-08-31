@@ -19,7 +19,8 @@ export class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
-        "Content-Type": this._headers.contentType,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
     }).then((res) => this._checkResponse(res));
   }
@@ -27,9 +28,11 @@ export class Api {
 
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        "Content-Type": this._headers.contentType,
-      },
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
     }).then((res) => this._checkResponse(res));
   }
   
