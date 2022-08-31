@@ -1,16 +1,18 @@
-// import components
-import React from 'react'
+import React from "react";
 
-function InfoTooltip({ isOpen, onClose, imgInfo, textInfo }) {
-  return (
-    <div className={`popup reg-info ${isOpen && 'popup_opened'}`}>
-      <div className="reg-info__window">
-        <button onClick={onClose} type="button" className="popup__close-button"></button>
-        <img className='reg-info__img' src={imgInfo} alt='изображените' />
-        <h3 className='reg-info__text'>{textInfo}</h3>
-      </div>
-    </div>
-  )
+export default function InfoTooltip({ isOpen, onClose, imgPath, title }) {
+    return (
+        <div className={`popup popup_type_tooltip ${isOpen && "popup_opened"}`}>
+            <div className="popup__container-tooltip">
+                <button className="popup__close" aria-label="закрыть" type="button" onClick={onClose}></button>
+                <div className="popup__wrapper">
+                    <img className="popup__open-tooltip" alt={imgPath} src={imgPath} />
+                    <h2 className="popup__heading-toolip">{title}</h2>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-export default InfoTooltip
+//Вы успешно зарегистрировались
+//Что-то пошло не так! Попробуйте ешё раз

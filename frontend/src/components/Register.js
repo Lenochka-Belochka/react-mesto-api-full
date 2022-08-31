@@ -1,54 +1,42 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import Auth from './Auth.js';
+import { Link } from 'react-router-dom';
 
 function Register({ onRegister }) {
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: ''
-  })
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  function handleChange(e) {
-    const {name, value} = e.target
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value
-    }))
+  function handleEmail(evt) {
+    setEmail(evt.target.value)
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    onRegister(formValues.password, formValues.email)
+  function handlePassword(evt) {
+    setPassword(evt.target.value)
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onRegister(password, email)
   }
 
   return (
-    <div className='auth root__auth'>
-      <h3 className='auth__title'>Регистрация</h3>
-      <form onSubmit={handleSubmit} className='auth__form'>
-        <input
-          onChange={handleChange}
-          value={formValues.email || ''}
-          className='auth__input'
-          name='email'
-          type='email'
-          placeholder='Email'
-          required
-        />
-        <input
-          onChange={handleChange}
-          value={formValues.password || ''}
-          className='auth__input'
-          name='password'
-          type='password'
-          placeholder='Пароль'
-          required
-        />
-        <button type='submit' className='auth__button'>Зарегистрироваться</button>
-      </form>
-      <Link to="./sign-in" className='auth__link'>
-        Уже зарегистрированы? Войти
-      </Link>
+    <div className="register">
+      <Auth title={'Регистрация'} name={'register'} onSubmit={handleSubmit}>
+        <input className="popup__input popup__input_type_auth" type="email" placeholder="Email" id="new_email"
+          name="email" value={email || ''} onChange={handleEmail}
+          minLength="2" maxLength="40" required />
+        <span className="popup__error email-error"></span>
+
+        <input className="popup__input popup__input_type_auth" type="password" placeholder="Пароль" id="new_password"
+          name="password" value={password || ''} onChange={handlePassword}
+          minLength="6" maxLength="200" required />
+        <span className="popup__error password-error"></span>
+
+        <button className={"popup__save popup__save_auth"} type="submit" >Зарегистрироваться</button>
+        <p className={"popup__text"}>Уже зарегистрированы? <Link className={"popup__link"} to={'/signin'}>Войти</Link></p>
+      </Auth>
     </div>
   )
 }
 
-export default Register
+export default Register; 
