@@ -21,7 +21,6 @@ export class Api {
       headers: {
         "Content-Type": this._headers.contentType,
       },
-      credentials: "include",
     }).then((res) => this._checkResponse(res));
   }
   //Публичный метод для загрузки карточек
@@ -31,7 +30,6 @@ export class Api {
       headers: {
         "Content-Type": this._headers.contentType,
       },
-      credentials: "include",
     }).then((res) => this._checkResponse(res));
   }
   
@@ -42,7 +40,6 @@ export class Api {
       headers: {
         "Content-Type": this._headers.contentType,
       },
-      credentials: "include",
     }).then((res) => this._checkResponse(res));
   }
 
