@@ -1,6 +1,6 @@
 export const BASE_URL = "https://mesto.back.project.nomoredomains.sbs";
 
-const  checkResponse(res) {
+const  checkResponse = (res) => {
     if (res.ok) {
       return res.json();
     }
