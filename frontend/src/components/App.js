@@ -8,7 +8,7 @@ import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 import * as auth from "../../src/utils/Auth";
-import api from "../../src/utils/Api";
+import { api } from "../utils/Api";
 
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
