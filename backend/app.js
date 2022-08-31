@@ -22,20 +22,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-const options = {
-  origin: [
-    "http://localhost:3000",
-    "https://mesto.first.project.nomoredomains.sbs",
-    "https://mesto.first.project.nomoredomains.sbs",
-  ],
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ["Content-Type", "origin", "Authorization"],
-  credentials: true,
-};
-
-app.use('*', cors(options));
+app.use(cors());
 
 app.use(requestLogger);
 
