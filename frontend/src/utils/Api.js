@@ -96,6 +96,7 @@ export class Api {
       .then((res) => this._checkResponse(res))
   }
 
+  /*
   // Метод для лайка карточки
   likeCard(cardId) {
     const request = this._baseUrl + `/cards/${cardId}/likes`;
@@ -115,6 +116,7 @@ export class Api {
     })
       .then((res) => this._checkResponse(res))
   }
+  */
   changeLikeCardStatus(cardId, isLiked) {
     const method = isLiked ? "DELETE" : "PUT";
     const request = this._baseUrl + `/cards/${cardId}/likes`;
