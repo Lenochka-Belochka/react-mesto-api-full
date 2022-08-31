@@ -2,8 +2,13 @@ import React from "react";
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
+  const like = card.likes;
   const currentUser = React.useContext(CurrentUserContext);
 
+  const isLiked = card.likes.some(item => item === currentUser._id);
+  const cardLikeButtonClassName = `element__button ${
+    isLiked ? "element__button_active" : ""
+  }`;
 /*
   // лайк, поставленный текущим пользователем
   const isLiked = card.likes.some((item) => {
@@ -56,12 +61,12 @@ const cardLikeButtonClassName = `element__button ${
         <h2 className="element__item-title">{card.name}</h2>
         <div className="element__like-group">
           <button
-            className="element__button_active"
+            className={cardLikeButtonClassName}
             type="button"
             aria-label="Like button"
             onClick={handleLikeClick}
           ></button>
-          <p className="element__likes-number">{card.likes}</p>
+          <p className="element__likes-number">{like.length}</p>
         </div>
       </div>
     </li>
