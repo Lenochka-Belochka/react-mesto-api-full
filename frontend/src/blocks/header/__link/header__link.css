@@ -1,25 +1,19 @@
 .header__link {
-    line-height: 22px;
-    color: #FFFFFF;
-    text-align: right;
-    background-color: transparent;
-    transition: opacity 0.3s linear;
-    cursor: pointer;
-    text-decoration: none;
-    margin: auto;
-    padding: 51px 24px 46px 0;
-    font-family: "Inter", Arial, sans-serif;
-    font-style: normal;
-    font-weight: normal;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
     font-size: 18px;
-  }
-  
-  .header__link:hover {
-    opacity: 0.6;
-  }
-  
-  @media screen and (max-width: 767px) {
-    .header__link {
-      font-size: 14px;
-    }
-  }
+    line-height: 22px;
+    color: #fff;
+    text-decoration: none;
+    transition: .2s;
+    max-height: 22px;
+    margin: 0;
+	padding: 0;
+	padding-top: 45px;
+	padding-bottom: 41px;
+}
+
+.header__link:hover {
+    cursor: pointer;
+    opacity: .6;
+}

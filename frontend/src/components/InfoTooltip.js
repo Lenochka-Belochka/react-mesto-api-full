@@ -1,40 +1,18 @@
 import React from "react";
-import PopupWithoutForm from "./PopupWithoutForm";
 
-function InfoTooltip(props) {
-  return (
-    <PopupWithoutForm isOpen={props.isOpen} onClose={props.onClose}>
-      {props.successReg ? (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.success_pic}
-            alt="Pic success"
-          />
-
-          <p className="popup__explanation">
-            Вы успешно
-            <br />
-            зарегистрировались!
-          </p>
+export default function InfoTooltip({ isOpen, onClose, imgPath, title }) {
+    return (
+        <div className={`popup popup_type_tooltip ${isOpen && "popup_opened"}`}>
+            <div className="popup__container-tooltip">
+                <button className="popup__close" aria-label="закрыть" type="button" onClick={onClose}></button>
+                <div className="popup__wrapper">
+                    <img className="popup__open-tooltip" alt={imgPath} src={imgPath} />
+                    <h2 className="popup__heading-toolip">{title}</h2>
+                </div>
+            </div>
         </div>
-      ) : (
-        <div className="popup__success-container">
-          <img
-            className="popup__success-picture"
-            src={props.unsuccess_pic}
-            alt="Pic unsuccess"
-          />
-
-          <p className="popup__explanation">
-            Что-то пошло не так!
-            <br />
-            Попробуйте еще раз.
-          </p>
-        </div>
-      )}
-    </PopupWithoutForm>
-  );
+    );
 }
 
-export default InfoTooltip;
+//Вы успешно зарегистрировались
+//Что-то пошло не так! Попробуйте ешё раз
