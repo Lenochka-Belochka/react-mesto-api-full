@@ -1,6 +1,6 @@
 export class Api {
   constructor({ baseUrl }) {
-    this._baseUrl = options.baseUrl
+    this._baseUrl = baseUrl
   }
 
   //Ответ от сервера
