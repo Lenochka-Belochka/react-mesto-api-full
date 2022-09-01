@@ -63,12 +63,11 @@ function App() {
 
   // разлогон делаем
   function onSignOut() {
-    setLoggedIn(false);
     localStorage.removeItem("jwt");
+    setLoggedIn(false);
     setEmail("");
     history.push("/signin");
   }
-
 
   useEffect(() => {
     if (loggedIn) {
@@ -86,17 +85,16 @@ function App() {
         .catch((err) => console.log(err));
     }
   }, [loggedIn]);
-
-
+  
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth
-        .checkToken(jwt)
+        .getContent(jwt)
         .then((res) => {
           setLoggedIn(true);
           setEmail(res.email);
-					history.push('/');
+          navigate("/");
         })
         .catch((err) => {
           console.log(err);
@@ -105,10 +103,45 @@ function App() {
   }, [history]);
 
 
+
+  //  лайк
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i === currentUser._id);
+    //запрос в API, получение обновлённых данных карточки
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((cards) =>
+          cards.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(`Ошибка обновления данных карточки: ${err}!`);
+      });
+  }
+
+ // обработчик удаления карточки
+ function handleCardDelete(card) {
+  api
+    .deleteCard(card._id)
+    .then(() => {
+      setCards((cards) => cards.filter((c) => c._id !== card._id));
+    })
+    .catch((err) => {
+      console.log(`Ошибка удаления карточки: ${err}!`);
+    });
+}
+
+
+
+
+
+/*
+
   const checkToken = React.useCallback(
 		() => {
 			const token = localStorage.getItem('jwt');
-			auth.getContent(token)
+			api.getContent(token)
 				.then((res) => {
 					setEmail(res.email)
 					setLoggedIn(true);
@@ -128,57 +161,11 @@ function App() {
 			}
 		}, [checkToken]
 	)
-  /*
-  function checkToken() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.getContent(jwt)
-        .then((res) => {
-          setUserEmail(res.email);
-          setLoggedIn(true);
-          history.push("/");
-        })
-        .catch((err) => {
-          console.log(`Ошибка при проверке токена: ${err}!`);
-        });
-    }
-  }
-
-  useEffect(() => {
-    checkToken();
-  }, [loggedIn]);
+ 
 */
-
-  //  лайк
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i === currentUser._id);
-    //запрос в API, получение обновлённых данных карточки
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        setCards((cards) =>
-          cards.map((c) => (c._id === card._id ? newCard : c))
-        );
-      })
-      .catch((err) => {
-        console.log(`Ошибка обновления данных карточки: ${err}!`);
-      });
-  }
-
   
 
-  // обработчик удаления карточки
-  function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
-      })
-      .catch((err) => {
-        console.log(`Ошибка удаления карточки: ${err}!`);
-      });
-  }
-
+ 
 
 
   // переменная состояния (большая картинка)
@@ -211,7 +198,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    auth
+    api
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -228,7 +215,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    auth
+    api
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
