@@ -64,7 +64,7 @@ function App() {
   function onSignOut() {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
-    setUserEmail("");
+    setEmail("");
     history.push("/signin");
   }
 
