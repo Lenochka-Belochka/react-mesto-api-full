@@ -162,7 +162,7 @@ function App() {
         .getInitialCards()
         .then((cards) => {
           console.log(cards);
-          setCards(res.reverse());
+          setCards(cards.reverse());
         })
         .catch((err) => {
           console.log(`Ошибка при запросе карточек: ${err}!`);
