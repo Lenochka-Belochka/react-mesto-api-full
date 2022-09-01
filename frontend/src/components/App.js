@@ -84,32 +84,6 @@ function App() {
   }, [loggedIn]);
 
 
-  /*
-  const checkToken = React.useCallback(
-		() => {
-			const token = localStorage.getItem('jwt');
-			auth.getContent(token)
-				.then((res) => {
-					setUserEmail(res.email)
-					setLoggedIn(true);
-					history.push('/')
-				})
-				.catch((r) => {
-					console.log(r);
-				})
-		}, [history]
-	)
-
-	React.useEffect(
-		() => {
-			const token = localStorage.getItem('jwt');
-			if (token) {
-				checkToken()
-			}
-		}, [checkToken]
-	)
-  */
-
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {

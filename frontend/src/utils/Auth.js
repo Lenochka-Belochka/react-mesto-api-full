@@ -9,6 +9,7 @@ export const BASE_URL = 'https://mesto.back.project.nomoredomains.sbs';
   return Promise.reject(`Ошибка выполнении запроса: ${res.status}`);
 }
 
+//регистрация
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
       method: "POST",

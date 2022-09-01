@@ -136,7 +136,6 @@ changeLikeCardStatus(cardId, isLiked) {
 }
 }
 
-// Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
 export const api = new Api({
   baseUrl: `https://mesto.back.project.nomoredomains.sbs`,
  }
