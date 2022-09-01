@@ -56,6 +56,7 @@ const findCard = (req, res, next) => {
     .catch(next);
 };
 
+/*
 
 const addLike = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
@@ -78,7 +79,7 @@ const removeLike = (req, res, next) => {
     })
     .catch(next);
 };
-/*
+*/
 const addLike = (req, res, next) => {
   const cardId = req.params.id;
   Card.findByIdAndUpdate(
@@ -122,7 +123,7 @@ const removeLike = (req, res, next) => {
       }
     });
 };
-*/
+
 module.exports = {
   postCard,
   findCard,
