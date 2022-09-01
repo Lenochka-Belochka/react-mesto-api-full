@@ -62,8 +62,8 @@ function App() {
 
   // разлогон делаем
   function onSignOut() {
-    localStorage.removeItem("jwt");
     setLoggedIn(false);
+    localStorage.removeItem("jwt");
     setUserEmail("");
     history.push("/signin");
   }
@@ -246,8 +246,8 @@ function App() {
   function handleLoginSubmit(email, password) {
     auth.login(email, password)
     .then((res) => {
-      setLoggedIn(true);
       localStorage.setItem("jwt", res.token);
+      setLoggedIn(true);
       history.push("/");
       handleLogin(email);
     })
