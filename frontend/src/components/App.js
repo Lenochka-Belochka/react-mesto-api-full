@@ -7,10 +7,9 @@ import unsuccessPic from "../../src/images/header/unsuccess_pic.svg";
 import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
-import { api } from "../../src/utils/Api";
+import { api, auth } from "../../src/utils/Api";
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
-import { register, login, getContent } from "../../src/utils/Auth";
 
 
 import Header from "./Header";
@@ -72,7 +71,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      api
+      auth
         .getUserProfile()
         .then((userData) => {
           console.log(userData);
@@ -85,26 +84,49 @@ function App() {
   }, [loggedIn]);
 
 
-  function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-			getContent(jwt)
-      .then((res) => {
-        if (res) {
+  const checkToken = React.useCallback(
+		() => {
+			const token = localStorage.getItem('jwt');
+			auth.getContent(token)
+				.then((res) => {
 					setUserEmail(res.email)
 					setLoggedIn(true);
-				}
-      })
+					history.push('/')
+				})
 				.catch((r) => {
 					console.log(r);
-				});
-		}
+				})
+		}, [history]
+	)
+
+	React.useEffect(
+		() => {
+			const token = localStorage.getItem('jwt');
+			if (token) {
+				checkToken()
+			}
+		}, [checkToken]
+	)
+  /*
+  function checkToken() {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth.getContent(jwt)
+        .then((res) => {
+          setUserEmail(res.email);
+          setLoggedIn(true);
+          history.push("/");
+        })
+        .catch((err) => {
+          console.log(`Ошибка при проверке токена: ${err}!`);
+        });
+    }
   }
 
   useEffect(() => {
     checkToken();
-}, []);
-  
+  }, [loggedIn]);
+*/
 
   //  лайк
   function handleCardLike(card) {
@@ -178,7 +200,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    api
+    auth
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -195,7 +217,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    api
+    auth
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
@@ -223,10 +245,10 @@ function App() {
   }
 
   function handleLoginSubmit(email, password) {
-    login(email, password)
+    auth.login(email, password)
     .then((res) => {
-      localStorage.setItem("jwt", res.token);
       setLoggedIn(true);
+      localStorage.setItem("jwt", res.token);
       history.push("/");
       handleLogin(email);
     })
@@ -239,12 +261,13 @@ function App() {
 
   // обработчик registration
     function handleRegisterSubmit(email, password) {
-      register(email, password)
+        auth.register(email, password)
       .then((res) => {
-          if (res) {
-            history.push("/signin");
-            handleSuccessRegLog(true);
-            }
+        console.log(res);
+        if (res) {
+          history.push("/signin");
+          handleSuccessRegLog(true);
+        }
       })
       .catch((err) => {
         console.log(`Ошибка при регистрации пользователя: ${err}!`);

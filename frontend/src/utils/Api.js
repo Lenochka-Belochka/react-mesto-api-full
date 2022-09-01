@@ -1,90 +1,117 @@
 class Api {
-  constructor({ baseUrl }) {
-    this._url = baseUrl;
+  constructor({ url, headers }) {
+      this._url = url;
+      this._headers = headers
   }
-
-  get _headers() {
-    return {
-        authorization: `Bearer ${localStorage.getItem('jwt')}`,
-        'Content-Type': 'application/json'
-    }
-}
-
-_checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
+  getInitialCards(token) {
+      return fetch(`${this._url}cards`, {
+              method:"GET",
+              headers: {...this._headers, authorization: `Bearer ${token}`},
+          })
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              }
+              return Promise.reject(`Ошибка: ${res.status}`);
+          })
+          .then((result) => {
+              console.log(result);
+              return result;
+          });
   }
-
-  getUserProfile() {
-    return fetch(`${this._url}/users/me`, {
-      headers: this._headers
-    })
-      .then(this._checkResponse);
+  getUserProfile(token) {
+      return fetch(`${this._url}users/me`, {
+              method:"GET",
+              headers: {...this._headers, authorization: `Bearer ${token}`},
+          })
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              }
+              return Promise.reject(`Ошибка: ${res.status}`);
+          })
+          .then((result) => {
+              console.log(result);
+              return result;
+          })
   }
-
-  getInitialCards() {
-    return fetch(`${this._url}/cards`, {
-      headers: this._headers
-    })
-      .then(this._checkResponse);
+  saveNewProfile(formData, token) {
+      return fetch(`${this._url}users/me`, {
+              method: 'PATCH',
+             headers: {...this._headers, authorization: `Bearer ${token}`},
+              body: JSON.stringify({
+                  name: formData.name,
+                  about: formData.about
+              })
+          })
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              }
+              return Promise.reject(`Ошибка: ${res.status}`);
+          })
   }
-
-  saveNewProfile(name, about) {
-    return fetch(`${this._url}/users/me`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({
-        name,
-        about
-      }),
-    })
-      .then(this._checkResponse);
-  }
-
-  addCard(name, link) {
-    return fetch(`${this._url}/cards`, {
-      method: "POST",
-      headers: this._headers,
-      body: JSON.stringify({
-        name,
-        link
+  addCard(formData, token) {
+      return fetch(`${this._url}cards`, {
+          method: 'POST',
+          headers: {...this._headers, authorization: `Bearer ${token}`},
+          body: JSON.stringify({
+              name: formData.name,
+              link: formData.link
+          })
       })
-    })
-      .then(this._checkResponse)
+      .then(res => {
+          if (res.ok) {
+              return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.status}`);
+      })
+}
+  deleteCard(id, token) {
+      return fetch(`${this._url}cards/${id}`, {
+          method: 'DELETE',
+          headers: {...this._headers, authorization: `Bearer ${token}`}
+      })
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              }
+              return Promise.reject(`Ошибка: ${res.status}`);
+          })
   }
-
-  deleteCard(id) {
-    return fetch(`${this._url}/cards/${id}`, {
-      method: "DELETE",
-      headers: this._headers
-    })
-      .then(this._checkResponse)
+  changeLikeCardStatus(CardId, isLiked, token) {
+      return fetch(`${this._url}cards/${CardId}/likes`, {
+          method: isLiked ? 'PUT' : 'DELETE',
+          headers: {...this._headers, authorization: `Bearer ${token}`}
+      })
+      .then(res => {
+          if (res.ok) {
+              return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.status}`);
+      })
   }
-
-  changeLikeCardStatus(id, isLiked) {
-    return fetch(`${this._url}/cards/${id}/likes`, {
-      method: isLiked ? 'PUT' : 'DELETE',
-      headers: this._headers
-    })
-      .then(this._checkResponse)
-  }
-
-  updateAvatar(avatar) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar
-      }),
-    })
-      .then(this._checkResponse);
+  updateAvatar(formData,  token) {
+      return fetch(`${this._url}users/me/avatar`, {
+              method: 'PATCH',
+              headers: {...this._headers, authorization: `Bearer ${token}`},
+              body: JSON.stringify({
+                  avatar: formData.avatar
+              })
+          })
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              }
+              return Promise.reject(`Ошибка: ${res.status}`);
+          })
   }
 }
-
 export const api = new Api({
-  baseUrl: "https://mesto.back.project.nomoredomains.sbs",
+  url: 'https://mesto.back.project.nomoredomains.sbs/',
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json',
+  }
 });
 
