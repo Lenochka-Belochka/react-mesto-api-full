@@ -7,7 +7,8 @@ import unsuccessPic from "../../src/images/header/unsuccess_pic.svg";
 import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
-import { api, auth } from "../../src/utils/Api";
+import { api } from "../utils/Api";
+import * as auth from "../utils/Auth";
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
 
@@ -46,6 +47,7 @@ function App() {
 
   // стейт данных о карточках
   const [cards, setCards] = React.useState([]);
+  
 
   function handleLogin(userEmail) {
     setLoggedIn(true);
@@ -68,19 +70,40 @@ function App() {
     history.push("/signin");
   }
 
+
   useEffect(() => {
     if (loggedIn) {
-      auth
+      api
         .getUserProfile()
-        .then((userData) => {
-          console.log(userData);
-          setCurrentUser(userData);
+        .then((res) => {
+          setCurrentUser(res);
         })
-        .catch((err) => {
-          console.log(`Ошибка при запросе данных пользователя: ${err}!`);
-        });
+        .catch((err) => console.log(err));
+      api
+        .getInitialCards()
+        .then((res) => {
+         setCards(res.reverse());
+        })
+        .catch((err) => console.log(err));
     }
   }, [loggedIn]);
+
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.email);
+					history.push('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [history]);
 
 
   const checkToken = React.useCallback(
@@ -143,6 +166,8 @@ function App() {
       });
   }
 
+  
+
   // обработчик удаления карточки
   function handleCardDelete(card) {
     api
@@ -155,19 +180,7 @@ function App() {
       });
   }
 
-  useEffect(() => {
-    if (loggedIn) {
-      api
-        .getInitialCards()
-        .then((cards) => {
-          console.log(cards);
-          setCards(cards);
-        })
-        .catch((err) => {
-          console.log(`Ошибка при запросе карточек: ${err}!`);
-        });
-    }
-  }, [loggedIn, history]);
+
 
   // переменная состояния (большая картинка)
   const [selectedCard, setSelectedCard] = React.useState({});
@@ -199,7 +212,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    auth
+    api
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -216,7 +229,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    auth
+    api
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
