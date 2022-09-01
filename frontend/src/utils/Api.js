@@ -97,9 +97,32 @@ export class Api {
       .then((res) => this._checkResponse(res))
   }
 
-  // разделила лайк и лислайк
+ // Метод для лайка карточки
+ likeCard(cardId) {
+  const request = this._baseUrl + `/cards/${cardId}/likes`;
+  return fetch(request, {
+    method: "PUT",
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json'
+  }
+  })
+    .then((res) => this._checkResponse(res))
+}
 
-  
+// Метод для удаления лайка 
+deleteLike(cardId) {
+  const request = this._baseUrl + `/cards/${cardId}/likes`;
+  return fetch(request, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json'
+  }
+  })
+    .then((res) => this._checkResponse(res))
+}
+
 changeLikeCardStatus(cardId, isLiked) {
   const method = isLiked ? "DELETE" : "PUT";
   const request = this._baseUrl + `/cards/${cardId}/likes`;
