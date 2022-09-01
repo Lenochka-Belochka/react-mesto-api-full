@@ -131,6 +131,7 @@ deleteLike(cardId) {
         return this.this._checkResponse(res);
     })
 }
+}
 /*
   changeLikeCardStatus(cardId, isLiked) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
