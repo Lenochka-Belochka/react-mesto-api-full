@@ -7,7 +7,7 @@ import unsuccessPic from "../../src/images/header/unsuccess_pic.svg";
 import avatar from "../../src/images/profile/Avatar.png";
 
 import { CurrentUserContext } from "../../src/contexts/CurrentUserContext";
-import { api } from "../utils/Api";
+import  api  from "../utils/Api";
 import * as auth from "../utils/Auth";
 import { Route, Switch } from "react-router-dom";
 import { withRouter, useHistory } from "react-router-dom";
@@ -47,7 +47,6 @@ function App() {
 
   // стейт данных о карточках
   const [cards, setCards] = React.useState([]);
-  
 
   function handleLogin(userEmail) {
     setLoggedIn(true);
@@ -212,7 +211,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    api
+    auth
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -229,7 +228,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    api
+    auth
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
