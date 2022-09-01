@@ -34,7 +34,7 @@ function App() {
     _id: "",
   });
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setEmail] = useState("");
   const [isSuccessRegLog, setIsSuccessRegLog] = useState(false);
 
   const [isEditProfilePopupOpen, setEditProfilePopupState] =
@@ -49,7 +49,7 @@ function App() {
 
   function handleLogin(userEmail) {
     setLoggedIn(true);
-    setUserEmail(userEmail);
+    setEmail(userEmail);
   }
 
   function handleSuccessRegLog(res) {
@@ -88,7 +88,7 @@ function App() {
 			const token = localStorage.getItem('jwt');
 			auth.getContent(token)
 				.then((res) => {
-					setUserEmail(res.email)
+					setEmail(res.email)
 					setLoggedIn(true);
 					history.push('/')
 				})
