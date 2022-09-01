@@ -70,7 +70,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      auth
+      api
         .getUserProfile()
         .then((userData) => {
           console.log(userData);
@@ -83,6 +83,7 @@ function App() {
   }, [loggedIn]);
 
 
+  /*
   const checkToken = React.useCallback(
 		() => {
 			const token = localStorage.getItem('jwt');
@@ -106,7 +107,8 @@ function App() {
 			}
 		}, [checkToken]
 	)
-  /*
+  */
+
   function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
@@ -125,7 +127,7 @@ function App() {
   useEffect(() => {
     checkToken();
   }, [loggedIn]);
-*/
+
 
   //  лайк
   function handleCardLike(card) {
@@ -199,7 +201,7 @@ function App() {
 
   // обработчик  профиля пользователя
   function handleUpdateUser(newProfile) {
-    auth
+    api
       .saveNewProfile(newProfile)
       .then((userData) => {
         setCurrentUser({
@@ -216,7 +218,7 @@ function App() {
 
   // обработчик изменения аватара
   function handleUpdateAvatar(newAvatar) {
-    auth
+    api
       .updateAvatar(newAvatar)
       .then((userData) => {
         setCurrentUser({
