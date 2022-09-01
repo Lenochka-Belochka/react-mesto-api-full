@@ -99,30 +99,19 @@ export class Api {
 
   // разделила лайк и лислайк
 
-  putLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-        method: 'PUT',
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('jwt')}`,
-          'Content-Type': 'application/json'
-      },
-      })
-      .then((res) => this._checkResponse(res))
-  }
-
-  deleteLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-        method: 'DELETE',
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('jwt')}`,
-          'Content-Type': 'application/json'
-      },
-      })
-      .then((res) => this._checkResponse(res))
-  }
+  
+changeLikeCardStatus(cardId, isLiked) {
+  const method = isLiked ? "DELETE" : "PUT";
+  const request = this._baseUrl + `/cards/${cardId}/likes`;
+  return fetch(request, {
+    method: method,
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json'
+  },
+  }).then((res) => this._checkResponse(res));
 }
-
-
+}
 
 // Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
 export const api = new Api({

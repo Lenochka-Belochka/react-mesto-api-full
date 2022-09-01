@@ -129,7 +129,7 @@ function App() {
     checkToken();
   }, [loggedIn]);
 
-/*
+
   //  лайк
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i === currentUser._id);
@@ -143,27 +143,7 @@ function App() {
         console.log(`Ошибка обновления данных карточки: ${err}!`);
       });
   }
-*/
 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i === currentUser._id);
-        //запрос в API, получение обновлённых данных карточки
-    if (!isLiked) {
-      api
-        .putLike(card._id)
-        .then((newCard) => {
-          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        })
-        .catch((err) => console.log(err));
-    } else {
-      api
-        .deleteLike(card._id)
-        .then((newCard) => {
-          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        })
-        .catch((err) => console.log(err));
-    }
-  }
   // обработчик удаления карточки
   function handleCardDelete(card) {
     api
