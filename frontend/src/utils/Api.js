@@ -84,8 +84,7 @@ _checkResponse(res) {
   }
 }
 
-const api = new Api({
+export const api = new Api({
   baseUrl: "https://mesto.back.project.nomoredomains.sbs",
 });
 
-export default api;
