@@ -94,7 +94,7 @@ function App() {
         .then((res) => {
           setLoggedIn(true);
           setEmail(res.email);
-          navigate("/");
+					history.push('/')
         })
         .catch((err) => {
           console.log(err);
