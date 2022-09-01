@@ -97,53 +97,32 @@ export class Api {
       .then((res) => this._checkResponse(res))
   }
 
+  // разделила лайк и лислайк
 
-  changeLikeCardStatus(id, isLiked) {
-    if (isLiked) {
-        return this.deleteLike(id);
-    } else {
-        return this.putLike(id);
-    }
-}
-
-putLike(cardId) {
+  putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
         method: 'PUT',
         headers: {
           authorization: `Bearer ${localStorage.getItem('jwt')}`,
           'Content-Type': 'application/json'
-                }
-    })
-    .then(res => {
-        return this._checkResponse(res);
-    })
-}
+      },
+      })
+      .then((res) => this._checkResponse(res))
+  }
 
-deleteLike(cardId) {
+  deleteLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
         method: 'DELETE',
         headers: {
           authorization: `Bearer ${localStorage.getItem('jwt')}`,
           'Content-Type': 'application/json'
-                }
-    })
-    .then(res => {
-        return this.this._checkResponse(res);
-    })
-}
-}
-/*
-  changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: {isLiked ? "DELETE" : "PUT"},
-      headers: {       
-      authorization: `Bearer ${localStorage.getItem('jwt')}`,
-      'Content-Type': 'application/json'
-    },
-    }).then((res) => this._checkResponse(res));
+      },
+      })
+      .then((res) => this._checkResponse(res))
   }
 }
- */
+
+
 
 // Здесь создаем экземпляр класса Api с нужными параметрами, включая токен, и экспортируем этот экземпляр вместо самого класса
 export const api = new Api({
