@@ -76,14 +76,18 @@ function App() {
         .then((res) => {
           setCurrentUser(res);
         })
-        .catch((err) => console.log(err));
-      api
+        .catch((err) => {
+          console.log(`Ошибка при запросе profile`);
+        });
+              api
         .getInitialCards()
         .then((res) => {
-         setCards(res.reverse());
+         setCards(res);
         })
-        .catch((err) => console.log(err));
-    }
+        .catch((err) => {
+          console.log(`Ошибка при запросе карточек: ${err}!`);
+        });
+          }
   }, [loggedIn]);
   
   useEffect(() => {
