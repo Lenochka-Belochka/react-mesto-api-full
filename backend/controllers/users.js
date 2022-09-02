@@ -66,7 +66,7 @@ const getUserId = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new BadRequest('Ошибочный id'));
+        return next(new BadRequest('Ошибочный id'));
       }
       next(error);
     });
