@@ -64,6 +64,7 @@ const getUserId = (req, res, next) => {
       }
       res.status(200).send(data);
     })
+    // eslint-disable-next-line consistent-return
     .catch((error) => {
       if (error.name === 'CastError') {
         return next(new BadRequest('Ошибочный id'));
